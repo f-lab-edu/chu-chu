@@ -1,1 +1,36 @@
+# common
+server:
+  port: 80
 
+---
+# dev
+spring:
+  config:
+    activate:
+      on-profile: dev
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+---
+# prod
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:mysql://{}:3306
+    username:
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
