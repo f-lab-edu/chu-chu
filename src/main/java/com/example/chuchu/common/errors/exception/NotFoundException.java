@@ -1,4 +1,4 @@
-package com.example.chuchu.commons.errors.exception;
+package com.example.chuchu.common.errors.exception;
 
 public class NotFoundException extends RuntimeException {
 
