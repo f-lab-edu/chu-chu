@@ -1,4 +1,4 @@
-package com.example.chuchu.commons.utils;
+package com.example.chuchu.common.utils;
 
 import lombok.Getter;
 import org.apache.commons.lang3.builder.ToStringBuilder;

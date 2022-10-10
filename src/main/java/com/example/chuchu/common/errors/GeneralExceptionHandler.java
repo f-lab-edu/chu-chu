@@ -1,7 +1,8 @@
-package com.example.chuchu.commons.errors;
+package com.example.chuchu.common.errors;
 
-import com.example.chuchu.commons.errors.exception.NotFoundException;
-import com.example.chuchu.commons.utils.ApiUtils;
+import com.example.chuchu.common.errors.exception.NotFoundException;
+import com.example.chuchu.common.errors.exception.UnauthorizedException;
+import com.example.chuchu.common.utils.ApiUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.example.chuchu.commons.utils.ApiUtils.error;
+import static com.example.chuchu.common.utils.ApiUtils.error;
 
 
 @ControllerAdvice
@@ -31,5 +32,9 @@ public class GeneralExceptionHandler {
         return newResponse(e, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<?> handleUnauthorizedException(Exception e) {
+        return newResponse(e, HttpStatus.UNAUTHORIZED);
+    }
 
 }
