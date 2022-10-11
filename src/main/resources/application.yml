@@ -19,6 +19,9 @@ spring:
     hibernate:
       ddl-auto: create-drop
     show-sql: true
+  redis:
+    port: 6379
+    host: localhost
 
 ---
 # prod
