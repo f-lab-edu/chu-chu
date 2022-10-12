@@ -12,8 +12,11 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
+        http
+                .csrf().disable()
+                .cors().disable()
+                .headers().frameOptions().disable();
+
         return http.build();
     }
 

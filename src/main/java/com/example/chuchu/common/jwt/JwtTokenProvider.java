@@ -4,40 +4,53 @@ import com.example.chuchu.member.entity.Member;
 import com.example.chuchu.member.entity.UserRole;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
+import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@NoArgsConstructor
+@Component
 public class JwtTokenProvider {
 
     //todo secretKey 변경
-    private static final String secretKey = "Thi$i$JwtP@s!!sw0rd0pEn$e$ame!!~";
-    private static final Key key;
+    private final String ACCESS_TOKEN_KEY = "Thi$i$JwtP@s!!sw0rd0pEn$e$ame!!~";
+    private final String REFRESH_TOKEN_KEY = "Thi$i$JwtP@s!!sw0rd0pEn$e$ame!!!";
 
-    static {
-        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
-        key = Keys.hmacShaKeyFor(keyBytes);
+    private final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 5;
+    private final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 10;
+
+    private Key createSigningKey(String signKey) {
+        byte[] keyBytes = signKey.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public static String generateJwtToken(Member member) {
+    public String generateAccessToken(Member member) {
         return Jwts.builder()
                 .setSubject(member.getEmail())
                 .setHeader(createHeader())
                 .setClaims(createClaims(member))
-                .setExpiration(createExpireDate())
-                .signWith(key, SignatureAlgorithm.HS256)
+                .setExpiration(createExpireDate(ACCESS_TOKEN_EXPIRE_TIME))
+                .signWith(createSigningKey(ACCESS_TOKEN_KEY), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public static boolean isValidToken(String token) {
+    public String generateRefreshToken(Member member) {
+        return Jwts.builder()
+                .setSubject(member.getEmail())
+                .setHeader(createHeader())
+                .setClaims(createClaims(member))
+                .setExpiration(createExpireDate(REFRESH_TOKEN_EXPIRE_TIME))
+                .signWith(createSigningKey(REFRESH_TOKEN_KEY), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public boolean isValidToken(String token) {
         try {
             Claims claims = getClaimsFormToken(token).getBody();
             log.info("expireTime :" + claims.getExpiration());
@@ -57,18 +70,17 @@ public class JwtTokenProvider {
         }
     }
 
-    public static String getTokenFromHeader(String header) {
+    public String getTokenFromHeader(String header) {
         return header.split(" ")[1];
     }
 
-    private static Date createExpireDate() {
+    private Date createExpireDate(long expireTime) {
         // 토큰 만료시간 설정
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, 30);
-        return c.getTime();
+        long curTime = System.currentTimeMillis();
+        return new Date(curTime + expireTime);
     }
 
-    private static Map<String, Object> createHeader() {
+    private Map<String, Object> createHeader() {
         Map<String, Object> header = new HashMap<>();
         header.put("typ", "JWT");
         header.put("alg", "HS256");
@@ -77,7 +89,7 @@ public class JwtTokenProvider {
         return header;
     }
 
-    private static Map<String, Object> createClaims(Member member) {
+    private Map<String, Object> createClaims(Member member) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", member.getEmail());
         claims.put("role", member.getUserRole());
@@ -85,27 +97,17 @@ public class JwtTokenProvider {
         return claims;
     }
 
-    private static Jws<Claims> getClaimsFormToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key)
+    private Jws<Claims> getClaimsFormToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(DatatypeConverter.parseBase64Binary(ACCESS_TOKEN_KEY))
                 .build().parseClaimsJws(token);
     }
 
-    public static String getUserEmailFromToken(String token) {
+    public String getUserEmailFromToken(String token) {
         return (String) getClaimsFormToken(token).getBody().get("email");
     }
 
-    public static UserRole getRoleFromToken(String token) {
+    public UserRole getRoleFromToken(String token) {
         return (UserRole) getClaimsFormToken(token).getBody().get("role");
-    }
-
-    // 유효 한 토큰 인지 확인
-    public static boolean isValidateToken(String jwtToken) {
-        try {
-            Jws<Claims> claims = getClaimsFormToken(jwtToken);
-            return !claims.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
-            return false;
-        }
     }
 
 }

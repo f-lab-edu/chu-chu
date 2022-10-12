@@ -1,8 +1,8 @@
 package com.example.chuchu.member.entity;
 
+import com.example.chuchu.common.global.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
-import com.example.chuchu.common.global.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
