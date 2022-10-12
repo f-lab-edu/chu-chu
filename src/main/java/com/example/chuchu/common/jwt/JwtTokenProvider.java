@@ -7,7 +7,6 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
@@ -98,7 +97,7 @@ public class JwtTokenProvider {
     }
 
     private Jws<Claims> getClaimsFormToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(DatatypeConverter.parseBase64Binary(ACCESS_TOKEN_KEY))
+        return Jwts.parserBuilder().setSigningKey(createSigningKey(ACCESS_TOKEN_KEY))
                 .build().parseClaimsJws(token);
     }
 
