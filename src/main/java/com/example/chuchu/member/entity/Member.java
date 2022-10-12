@@ -28,16 +28,20 @@ public class Member extends BaseTimeEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "level", nullable = false)
+    private Level level;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role")
     private UserRole userRole;
 
     @Builder
-    public Member(Long id, String email, String nickName, String password, UserRole userRole) {
+    public Member(Long id, String email, String nickName, String password, Level level, UserRole userRole) {
         this.id = id;
         this.email = email;
         this.nickName = nickName;
         this.password = password;
+        this.level = level;
         this.userRole = userRole;
     }
 }
