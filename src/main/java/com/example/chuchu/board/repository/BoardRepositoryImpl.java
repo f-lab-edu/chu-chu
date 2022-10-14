@@ -1,20 +1,14 @@
 package com.example.chuchu.board.repository;
 
 import com.example.chuchu.board.dto.BoardDTO;
-import com.example.chuchu.board.dto.TagDTO;
 import com.example.chuchu.board.entity.*;
-import com.example.chuchu.board.mapper.BoardMapper;
-import com.example.chuchu.board.mapper.TagMapper;
 import com.example.chuchu.member.dto.MemberDTO;
-import com.example.chuchu.member.entity.Member;
-import com.example.chuchu.member.entity.QMember;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +23,7 @@ import static com.example.chuchu.member.entity.QMember.member;
 public class BoardRepositoryImpl implements BoardCustomRepository{
 
     private final JPAQueryFactory queryFactory;
-    private final TagMapper tagMapper;
+
     @Override
     public PageImpl<BoardDTO> getBoardList(String query, Pageable pageable) {
 
