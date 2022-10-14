@@ -8,6 +8,8 @@ spring:
   redis:
     host: localhost
     port: 6379
+  profiles:
+    active: dev
 ---
 # dev
 spring:
@@ -25,6 +27,10 @@ spring:
     hibernate:
       ddl-auto: create-drop
     show-sql: true
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        format_sql: true
   flyway:
     enabled: false
 
@@ -35,13 +41,14 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    url: jdbc:mysql://{}:3306
-    username:
-    password:
+#    url: jdbc:mysql://{}:3306
+    url: jdbc:mysql://49.50.165.114:3306/chuchu?serverTimezone=Asia/Seoul
+    username: root
+    password: chuchu
   jpa:
     hibernate:
-      ddl-auto: validate
-    show-sql: false
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
+      ddl-auto: update
+    show-sql: true
+#  flyway:
+#    enabled: true
+#    baseline-on-migrate: true
