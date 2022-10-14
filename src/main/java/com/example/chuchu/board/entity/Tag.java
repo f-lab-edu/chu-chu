@@ -2,6 +2,7 @@ package com.example.chuchu.board.entity;
 
 import com.example.chuchu.common.global.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +22,9 @@ public class Tag extends BaseTimeEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Builder
+    public Tag(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

@@ -1,9 +1,8 @@
 package com.example.chuchu.board.repository;
 
 import com.example.chuchu.board.entity.Board;
+import com.example.chuchu.board.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface BoardRepository extends JpaRepository<Board, Long>, BoardCustomRepository {
+public interface TagRepository extends JpaRepository<Tag, Long> {
 }
