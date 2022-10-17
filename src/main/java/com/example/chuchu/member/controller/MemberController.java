@@ -19,6 +19,7 @@ import static com.example.chuchu.common.global.HttpResponseEntity.success;
 @RestController
 @RequestMapping(value = "/member")
 public class MemberController {
+/*
 
     private final MemberService memberService;
 
@@ -40,5 +41,6 @@ public class MemberController {
     public ResponseResult<MemberDTO> join(@RequestBody @Valid MemberDTO memberDTO) {
         return success(memberMapper.toDto(memberService.join(memberDTO)));
     }
+*/
 
 }

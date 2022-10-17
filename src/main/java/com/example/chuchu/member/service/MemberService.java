@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-
+/*
     private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -53,6 +53,6 @@ public class MemberService {
 
 
         return memberRepository.save(member);
-    }
+    }*/
 
 }
