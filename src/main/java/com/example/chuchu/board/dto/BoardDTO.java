@@ -1,16 +1,11 @@
 package com.example.chuchu.board.dto;
 
-import com.example.chuchu.board.entity.Tag;
 import com.example.chuchu.member.dto.MemberDTO;
-import com.example.chuchu.member.entity.Member;
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Column;
 import java.time.LocalDateTime;
 import java.util.List;
 
