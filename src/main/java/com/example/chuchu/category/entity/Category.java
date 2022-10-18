@@ -1,4 +1,4 @@
-package com.example.chuchu.board.entity;
+package com.example.chuchu.category.entity;
 
 import com.example.chuchu.common.global.BaseTimeEntity;
 import lombok.AccessLevel;

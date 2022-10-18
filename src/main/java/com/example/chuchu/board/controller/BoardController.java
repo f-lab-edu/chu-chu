@@ -50,7 +50,7 @@ public class BoardController {
     @PostMapping("/{boardType}")
     public ResponseResult<BoardResponseDTO> insert(@PathVariable(value = "boardType") String boardType,
                                                    @RequestBody @Valid BoardRequestDTO boardRequestDTO) {
-        boardService.insert(boardRequestDTO);
+        boardService.insert(boardType, boardRequestDTO);
         return null;
 //        return success(boardMapper.toDto(boardService.insert(boardResponseDto)));
     }

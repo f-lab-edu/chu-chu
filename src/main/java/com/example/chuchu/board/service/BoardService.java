@@ -4,11 +4,14 @@ import com.example.chuchu.board.dto.BoardRequestDTO;
 import com.example.chuchu.board.dto.BoardResponseDTO;
 import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.board.entity.BoardType;
-import com.example.chuchu.board.mapper.BoardMapper;
 import com.example.chuchu.board.repository.BoardRepository;
+import com.example.chuchu.category.entity.Category;
+import com.example.chuchu.category.repository.CategoryRepository;
 import com.example.chuchu.comment.dto.CommentDTO;
 import com.example.chuchu.comment.repository.CommentRepository;
 import com.example.chuchu.common.errors.exception.NotFoundException;
+import com.example.chuchu.member.entity.Member;
+import com.example.chuchu.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +28,8 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
+    private final MemberRepository memberRepository;
+    private final CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
     public Board findById(Long id) {
@@ -37,11 +42,25 @@ public class BoardService {
     }
 
     @Transactional
-    public Board insert(BoardRequestDTO boardRequestDTO) {
-        //TODO 저장할 때 필요한 정보 ()
+    public Board insert(String boardType, BoardRequestDTO boardRequestDTO) {
 
-//        Board board = BoardMapper.INSTANCE.toEntity(boardRequestDTO);
-        return null;
+        Member member = memberRepository.findById(boardRequestDTO.getMemberId())
+                .orElseThrow(() -> new NotFoundException("Could not found member id : " + boardRequestDTO.getMemberId()));
+
+        Category category = categoryRepository.findById(boardRequestDTO.getCateId())
+                .orElseThrow(() -> new NotFoundException("Could not found category id : " + boardRequestDTO.getCateId()));
+
+        Board board = Board.builder()
+                .title(boardRequestDTO.getTitle())
+                .hashTag(boardRequestDTO.getHashTag())
+                .content(boardRequestDTO.getContent())
+                .isSecret(true)
+                .boardType(BoardType.valueOf(boardType.toUpperCase()))
+                .writer(member)
+                .category(category)
+                .build();
+
+        return boardRepository.save(board);
     }
 
     @Transactional

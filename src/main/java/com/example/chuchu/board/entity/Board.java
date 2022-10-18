@@ -1,6 +1,7 @@
 package com.example.chuchu.board.entity;
 
 import com.example.chuchu.board.dto.BoardResponseDTO;
+import com.example.chuchu.category.entity.Category;
 import com.example.chuchu.common.global.BaseTimeEntity;
 import com.example.chuchu.member.entity.Member;
 import lombok.AccessLevel;
@@ -8,16 +9,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
-
-import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@DynamicInsert
 @Table(name = "board")
 public class Board extends BaseTimeEntity {
 
