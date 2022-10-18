@@ -1,8 +1,6 @@
 package com.example.chuchu.board.mapper;
 
-import com.example.chuchu.board.dto.BoardDTO;
 import com.example.chuchu.board.dto.TagDTO;
-import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.board.entity.Tag;
 import com.example.chuchu.common.global.GenericMapper;
 import org.mapstruct.Mapper;

@@ -1,6 +1,6 @@
 package com.example.chuchu.board.service;
 
-import com.example.chuchu.board.dto.BoardDTO;
+import com.example.chuchu.board.dto.BoardResponseDTO;
 import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.board.entity.BoardType;
 import com.example.chuchu.board.mapper.BoardMapper;
@@ -36,15 +36,15 @@ public class BoardService {
     }
 
     @Transactional
-    public Board insert(BoardDTO boardDto) {
-        Board board = BoardMapper.INSTANCE.toEntity(boardDto);
+    public Board insert(BoardResponseDTO boardResponseDto) {
+        Board board = BoardMapper.INSTANCE.toEntity(boardResponseDto);
         return boardRepository.save(board);
     }
 
     @Transactional
-    public Board update(BoardDTO boardDto, long id) {
+    public Board update(BoardResponseDTO boardResponseDto, long id) {
         Board board = findById(id);
-        return boardRepository.save(board.updateBoard(boardDto));
+        return boardRepository.save(board.updateBoard(boardResponseDto));
     }
 
     @Transactional
@@ -55,7 +55,7 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public PageImpl<BoardDTO> getBoardList(String query, BoardType boardType, Pageable pageable) {
+    public PageImpl<BoardResponseDTO> getBoardList(String query, BoardType boardType, Pageable pageable) {
         // query 에 들어올 수 있는 값 : 제목
         // pageable의 정렬 기준 : 최신순, 조회순, 좋아요 순
         if (query == null){
@@ -65,11 +65,11 @@ public class BoardService {
         return boardRepository.getBoardList(query, boardType, pageable);
     }
 
-    public BoardDTO getBoardWithTag(Long id) {
+    public BoardResponseDTO getBoardWithTag(Long id) {
 
-        BoardDTO boardDTO = boardRepository.getBoardWithTag(id);
+        BoardResponseDTO boardResponseDTO = boardRepository.getBoardWithTag(id);
         List<CommentDTO> commentDTOList = commentRepository.findByBoardId(id);
-        boardDTO.setCommentDTOList(commentDTOList);
-        return boardDTO;
+        boardResponseDTO.setCommentDTOList(commentDTOList);
+        return boardResponseDTO;
     }
 }

@@ -1,9 +1,8 @@
 package com.example.chuchu.board.entity;
 
-import com.example.chuchu.board.dto.BoardDTO;
+import com.example.chuchu.board.dto.BoardResponseDTO;
 import com.example.chuchu.common.global.BaseTimeEntity;
 import com.example.chuchu.member.entity.Member;
-import com.example.chuchu.member.entity.UserRole;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -79,11 +78,11 @@ public class Board extends BaseTimeEntity {
         this.boardTagMapList = boardTagMapList;
     }
 
-    public Board updateBoard(BoardDTO boardDto) {
-        this.title = boardDto.getTitle();
-        this.content = boardDto.getContent();
-        this.likeCount = boardDto.getLikeCount();
-        this.isSecret = boardDto.getIsSecret();
+    public Board updateBoard(BoardResponseDTO boardResponseDto) {
+        this.title = boardResponseDto.getTitle();
+        this.content = boardResponseDto.getContent();
+        this.likeCount = boardResponseDto.getLikeCount();
+        this.isSecret = boardResponseDto.getIsSecret();
         return this;
     }
 }
