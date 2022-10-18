@@ -25,11 +25,6 @@ public class BoardController {
     private final BoardService boardService;
     private final BoardMapper boardMapper;
 
-//    @GetMapping("/{id}")
-//    public ResponseResult<BoardDTO> getOne(@PathVariable Long id) {
-//        return success(boardMapper.toDto(boardService.findById(id)));
-//    }
-
     @GetMapping("/{boardType}")
     public ResponseResult<?> getList(@PathVariable(value = "boardType") String boardType,
                                      @RequestParam(value = "query", required = false) String query,
@@ -43,6 +38,12 @@ public class BoardController {
                 page == null ? 1 : page, 20, Sort.Direction.DESC, sort == null ? "id" : sort);
         PageImpl<BoardDTO> boardList = boardService.getBoardList(query, boardType1, pageRequest.of());
         return success(boardList);
+    }
+
+    @GetMapping("/{boardType}/{id}")
+    public ResponseResult<BoardDTO> getOne(@PathVariable(value = "boardType") String boardType,
+                                           @PathVariable(value = "id") Long id) {
+        return success(boardService.getBoardWithTag(id));
     }
 
     @PostMapping

@@ -10,4 +10,5 @@ public interface BoardCustomRepository {
     // TODO 구체적인 타입은 추후에 추가
     PageImpl<BoardDTO> getBoardList(String query, BoardType boardType, Pageable pageable);
 
+    BoardDTO getBoardWithTag(Long id);
 }

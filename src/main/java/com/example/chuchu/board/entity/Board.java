@@ -41,8 +41,12 @@ public class Board extends BaseTimeEntity {
     @Column(name = "view_count",nullable = false)
     private Integer viewCount;
 
-    @Column(name = "secret",nullable = false)
-    private Boolean secret;
+    @ColumnDefault("0")
+    @Column(name = "comment_count",nullable = false)
+    private Integer commentCount;
+
+    @Column(name = "is_secret",nullable = false)
+    private Boolean isSecret;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
@@ -60,14 +64,15 @@ public class Board extends BaseTimeEntity {
     private List<BoardTagMap> boardTagMapList;
 
     @Builder
-    public Board(Long id, String title, String content, Integer likeCount, Integer viewCount, Boolean secret,
-                 Member writer, BoardType boardType, Category category, List<BoardTagMap> boardTagMapList) {
+    public Board(Long id, String title, String content, Integer likeCount, Integer viewCount, Integer commentCount,
+                 Boolean isSecret, Member writer, BoardType boardType, Category category, List<BoardTagMap> boardTagMapList) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.likeCount = likeCount;
         this.viewCount = viewCount;
-        this.secret = secret;
+        this.commentCount = commentCount;
+        this.isSecret = isSecret;
         this.writer = writer;
         this.boardType = boardType;
         this.category = category;
@@ -78,7 +83,7 @@ public class Board extends BaseTimeEntity {
         this.title = boardDto.getTitle();
         this.content = boardDto.getContent();
         this.likeCount = boardDto.getLikeCount();
-        this.secret = boardDto.getSecret();
+        this.isSecret = boardDto.getIsSecret();
         return this;
     }
 }

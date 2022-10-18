@@ -1,6 +1,8 @@
-package com.example.chuchu.board.entity;
+package com.example.chuchu.comment.entity;
 
+import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.common.global.BaseTimeEntity;
+import com.example.chuchu.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +28,12 @@ public class Comment extends BaseTimeEntity {
     @Column(nullable = false, length = 1000)
     private String content;
 
+
+    private Boolean isDeleted;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "member_id")
+    private Member writer;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_id")
     private Comment parent;

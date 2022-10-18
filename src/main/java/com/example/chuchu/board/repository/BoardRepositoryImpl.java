@@ -4,6 +4,8 @@ import com.example.chuchu.board.dto.BoardDTO;
 import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.board.entity.BoardType;
 import com.example.chuchu.board.mapper.BoardMapper;
+import com.example.chuchu.common.errors.exception.NotFoundException;
+import com.example.chuchu.member.dto.MemberDTO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.chuchu.board.entity.QBoard.board;
 import static com.example.chuchu.board.entity.QBoardTagMap.boardTagMap;
@@ -52,8 +55,34 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
                 .where(board.id.in(ids))
                 .fetch();
 
-        List<BoardDTO> boardDTOList = BoardMapper.INSTANCE.toDtoList(boardList);
+        List<BoardDTO> boardDTOList = boardList.stream().map(e -> new BoardDTO(e.getId(), e.getTitle(), e.getContent(), e.getLikeCount(), e.getViewCount(),
+                e.getCommentCount(), e.getIsSecret(), e.getBoardType(), (e.getWriter() != null) ? new MemberDTO(e.getWriter()) : null,
+                (e.getBoardTagMapList() != null) ? e.getBoardTagMapList().stream().map(l -> l.getTag().getName()).collect(Collectors.toList()) : null,
+                null, e.getCreatedAt(), e.getUpdatedAt())).collect(Collectors.toList());
 
         return new PageImpl<>(boardDTOList, pageable, count);
+    }
+
+    @Override
+    public BoardDTO getBoardWithTag(Long id) {
+
+        Board board1 = queryFactory.select(board)
+                .from(board)
+                .leftJoin(board.category, category).fetchJoin()
+                .leftJoin(board.writer, member).fetchJoin()
+                .leftJoin(board.boardTagMapList, boardTagMap).fetchJoin()
+                .leftJoin(boardTagMap.tag, tag).fetchJoin()
+                .where(board.id.eq(id))
+                .fetchOne();
+
+        if (board1 == null) {
+            throw new NotFoundException("Could not found board id : " + id);
+        }
+
+        return new BoardDTO(board1.getId(), board1.getTitle(), board1.getContent(), board1.getLikeCount(), board1.getViewCount(),
+                board1.getCommentCount(), board1.getIsSecret(), board1.getBoardType(), (board1.getWriter() != null) ?new MemberDTO(board1.getWriter()) : null,
+                (board1.getBoardTagMapList() != null) ? board1.getBoardTagMapList().stream().map(e -> e.getTag().getName()).collect(Collectors.toList()) : null,
+                null, board1.getCreatedAt(), board1.getUpdatedAt());
+
     }
 }

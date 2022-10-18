@@ -5,6 +5,8 @@ import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.board.entity.BoardType;
 import com.example.chuchu.board.mapper.BoardMapper;
 import com.example.chuchu.board.repository.BoardRepository;
+import com.example.chuchu.comment.dto.CommentDTO;
+import com.example.chuchu.comment.repository.CommentRepository;
 import com.example.chuchu.common.errors.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
@@ -21,6 +23,7 @@ import static lombok.Lombok.checkNotNull;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional(readOnly = true)
     public Board findById(Long id) {
@@ -60,5 +63,13 @@ public class BoardService {
         }
 
         return boardRepository.getBoardList(query, boardType, pageable);
+    }
+
+    public BoardDTO getBoardWithTag(Long id) {
+
+        BoardDTO boardDTO = boardRepository.getBoardWithTag(id);
+        List<CommentDTO> commentDTOList = commentRepository.findByBoardId(id);
+        boardDTO.setCommentDTOList(commentDTOList);
+        return boardDTO;
     }
 }
