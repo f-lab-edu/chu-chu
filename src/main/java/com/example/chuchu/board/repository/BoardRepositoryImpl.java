@@ -1,8 +1,9 @@
 package com.example.chuchu.board.repository;
 
 import com.example.chuchu.board.dto.BoardDTO;
-import com.example.chuchu.board.entity.*;
-import com.example.chuchu.member.dto.MemberDTO;
+import com.example.chuchu.board.entity.Board;
+import com.example.chuchu.board.entity.BoardType;
+import com.example.chuchu.board.mapper.BoardMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
@@ -10,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.chuchu.board.entity.QBoard.board;
 import static com.example.chuchu.board.entity.QBoardTagMap.boardTagMap;
@@ -20,17 +20,18 @@ import static com.example.chuchu.member.entity.QMember.member;
 
 @RequiredArgsConstructor
 @Repository
-public class BoardRepositoryImpl implements BoardCustomRepository{
+public class BoardRepositoryImpl implements BoardCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public PageImpl<BoardDTO> getBoardList(String query, Pageable pageable) {
+    public PageImpl<BoardDTO> getBoardList(String query, BoardType boardType, Pageable pageable) {
 
         List<Long> ids = queryFactory.
                 select(board.id)
                 .from(board)
-                .where(board.title.contains(query))
+                .where(board.title.contains(query),
+                       board.boardType.eq(boardType))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -38,7 +39,8 @@ public class BoardRepositoryImpl implements BoardCustomRepository{
         Long count = queryFactory
                 .select(board.count())
                 .from(board)
-                .where(board.title.contains(query))
+                .where(board.title.contains(query),
+                       board.boardType.eq(boardType))
                 .fetchOne();
 
         List<Board> boardList = queryFactory
@@ -50,10 +52,7 @@ public class BoardRepositoryImpl implements BoardCustomRepository{
                 .where(board.id.in(ids))
                 .fetch();
 
-        List<BoardDTO> boardDTOList = boardList.stream().map(e -> new BoardDTO(e.getId(), e.getTitle(), e.getContent(), e.getLikeCount(), e.getViewCount(),
-                e.getSecret(), new MemberDTO(e.getWriter()),
-                (e.getBoardTagMapList() != null) ? e.getBoardTagMapList().stream().map(l -> l.getTag().getName()).collect(Collectors.toList()) : null,
-                e.getCreatedAt(), e.getUpdatedAt())).collect(Collectors.toList());
+        List<BoardDTO> boardDTOList = BoardMapper.INSTANCE.toDtoList(boardList);
 
         return new PageImpl<>(boardDTOList, pageable, count);
     }

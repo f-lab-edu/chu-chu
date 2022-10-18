@@ -3,6 +3,7 @@ package com.example.chuchu.board.entity;
 import com.example.chuchu.board.dto.BoardDTO;
 import com.example.chuchu.common.global.BaseTimeEntity;
 import com.example.chuchu.member.entity.Member;
+import com.example.chuchu.member.entity.UserRole;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,6 +48,10 @@ public class Board extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member writer;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "board_type")
+    private BoardType boardType;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
@@ -56,7 +61,7 @@ public class Board extends BaseTimeEntity {
 
     @Builder
     public Board(Long id, String title, String content, Integer likeCount, Integer viewCount, Boolean secret,
-                 Member writer, Category category, List<BoardTagMap> boardTagMapList) {
+                 Member writer, BoardType boardType, Category category, List<BoardTagMap> boardTagMapList) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -64,6 +69,7 @@ public class Board extends BaseTimeEntity {
         this.viewCount = viewCount;
         this.secret = secret;
         this.writer = writer;
+        this.boardType = boardType;
         this.category = category;
         this.boardTagMapList = boardTagMapList;
     }

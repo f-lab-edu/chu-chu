@@ -2,6 +2,7 @@ package com.example.chuchu.board.service;
 
 import com.example.chuchu.board.dto.BoardDTO;
 import com.example.chuchu.board.entity.Board;
+import com.example.chuchu.board.entity.BoardType;
 import com.example.chuchu.board.mapper.BoardMapper;
 import com.example.chuchu.board.repository.BoardRepository;
 import com.example.chuchu.common.errors.exception.NotFoundException;
@@ -51,13 +52,13 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public PageImpl<BoardDTO> getBoardList(String query, Pageable pageable) {
+    public PageImpl<BoardDTO> getBoardList(String query, BoardType boardType, Pageable pageable) {
         // query 에 들어올 수 있는 값 : 제목
         // pageable의 정렬 기준 : 최신순, 조회순, 좋아요 순
         if (query == null){
             query = "";
         }
 
-        return boardRepository.getBoardList(query, pageable);
+        return boardRepository.getBoardList(query, boardType, pageable);
     }
 }
