@@ -1,8 +1,11 @@
 package com.example.chuchu.board.repository;
 
-import com.example.chuchu.board.dto.BoardDTO;
-import com.example.chuchu.board.entity.*;
-import com.example.chuchu.member.dto.MemberDTO;
+import com.example.chuchu.board.dto.BoardResponseDTO;
+import com.example.chuchu.board.entity.Board;
+import com.example.chuchu.board.entity.BoardType;
+import com.example.chuchu.board.mapper.BoardResponseMapper;
+import com.example.chuchu.category.entity.QCategory;
+import com.example.chuchu.common.errors.exception.NotFoundException;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
@@ -10,51 +13,61 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.chuchu.board.entity.QBoard.board;
-import static com.example.chuchu.board.entity.QBoardTagMap.boardTagMap;
-import static com.example.chuchu.board.entity.QCategory.category;
-import static com.example.chuchu.board.entity.QTag.tag;
+import static com.example.chuchu.category.entity.QCategory.category;
 import static com.example.chuchu.member.entity.QMember.member;
 
 @RequiredArgsConstructor
 @Repository
-public class BoardRepositoryImpl implements BoardCustomRepository{
+public class BoardRepositoryImpl implements BoardCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public PageImpl<BoardDTO> getBoardList(String query, Pageable pageable) {
+    public PageImpl<BoardResponseDTO> getBoardList(String query, BoardType boardType, Pageable pageable) {
 
-        List<Long> ids = queryFactory.
-                select(board.id)
-                .from(board)
-                .where(board.title.contains(query))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+        List<Board> boardList = queryFactory
+                .selectFrom(board)
+                .leftJoin(board.category, category).fetchJoin()
+                .leftJoin(board.writer, member).fetchJoin()
+                .where(board.title.contains(query),
+                        board.boardType.eq(boardType))
                 .fetch();
 
         Long count = queryFactory
                 .select(board.count())
                 .from(board)
-                .where(board.title.contains(query))
+                .where(board.title.contains(query),
+                       board.boardType.eq(boardType))
                 .fetchOne();
 
-        List<Board> boardList = queryFactory
-                .selectFrom(board).distinct()
+        List<BoardResponseDTO> boardResponseDTOList = BoardResponseMapper.INSTANCE.toDtoList(boardList);
+
+        return new PageImpl<>(boardResponseDTOList, pageable, count);
+    }
+
+    @Override
+    public BoardResponseDTO getBoardWithTag(Long id) {
+
+        // TODO 중복 조회를 어떻게 예방할 것인지 고민해야함
+        queryFactory.update(board)
+                .set(board.viewCount, board.viewCount.add(1))
+                .where(board.id.eq(id))
+                .execute();
+
+        Board board1 = queryFactory.select(board)
+                .from(board)
                 .leftJoin(board.category, category).fetchJoin()
                 .leftJoin(board.writer, member).fetchJoin()
-                .leftJoin(board.boardTagMapList, boardTagMap).fetchJoin()
-                .leftJoin(boardTagMap.tag, tag).fetchJoin()
-                .where(board.id.in(ids))
-                .fetch();
+                .where(board.id.eq(id))
+                .fetchOne();
 
-        List<BoardDTO> boardDTOList = boardList.stream().map(e -> new BoardDTO(e.getId(), e.getTitle(), e.getContent(), e.getLikeCount(), e.getViewCount(),
-                e.getSecret(), new MemberDTO(e.getWriter()),
-                (e.getBoardTagMapList() != null) ? e.getBoardTagMapList().stream().map(l -> l.getTag().getName()).collect(Collectors.toList()) : null,
-                e.getCreatedAt(), e.getUpdatedAt())).collect(Collectors.toList());
+        if (board1 == null) {
+            throw new NotFoundException("Could not found board id : " + id);
+        }
 
-        return new PageImpl<>(boardDTOList, pageable, count);
+        return BoardResponseMapper.INSTANCE.toDto(board1);
+
     }
 }
