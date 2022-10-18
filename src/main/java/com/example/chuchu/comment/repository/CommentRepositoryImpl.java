@@ -11,8 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.chuchu.board.entity.QComment.comment;
+
 import static com.example.chuchu.comment.dto.CommentDTO.convertCommentToDto;
+import static com.example.chuchu.comment.entity.QComment.comment;
 
 @RequiredArgsConstructor
 @Repository

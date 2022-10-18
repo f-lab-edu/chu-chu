@@ -1,5 +1,6 @@
 package com.example.chuchu.board.controller;
 
+import com.example.chuchu.board.dto.BoardRequestDTO;
 import com.example.chuchu.board.dto.BoardResponseDTO;
 import com.example.chuchu.board.entity.BoardType;
 import com.example.chuchu.board.mapper.BoardMapper;
@@ -46,9 +47,12 @@ public class BoardController {
         return success(boardService.getBoardWithTag(id));
     }
 
-    @PostMapping
-    public ResponseResult<BoardResponseDTO> insert(@RequestBody @Valid BoardResponseDTO boardResponseDto) {
-        return success(boardMapper.toDto(boardService.insert(boardResponseDto)));
+    @PostMapping("/{boardType}")
+    public ResponseResult<BoardResponseDTO> insert(@PathVariable(value = "boardType") String boardType,
+                                                   @RequestBody @Valid BoardRequestDTO boardRequestDTO) {
+        boardService.insert(boardRequestDTO);
+        return null;
+//        return success(boardMapper.toDto(boardService.insert(boardResponseDto)));
     }
 
     @PutMapping("/{id}")
