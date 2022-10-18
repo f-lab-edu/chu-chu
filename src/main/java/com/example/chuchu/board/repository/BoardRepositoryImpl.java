@@ -3,9 +3,9 @@ package com.example.chuchu.board.repository;
 import com.example.chuchu.board.dto.BoardResponseDTO;
 import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.board.entity.BoardType;
-import com.example.chuchu.board.mapper.BoardMapper;
+import com.example.chuchu.board.mapper.BoardResponseMapper;
+import com.example.chuchu.category.entity.QCategory;
 import com.example.chuchu.common.errors.exception.NotFoundException;
-import com.example.chuchu.member.dto.MemberDTO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
@@ -13,10 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.chuchu.board.entity.QBoard.board;
-import static com.example.chuchu.board.entity.QCategory.category;
+import static com.example.chuchu.category.entity.QCategory.category;
 import static com.example.chuchu.member.entity.QMember.member;
 
 @RequiredArgsConstructor
@@ -43,7 +42,7 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
                        board.boardType.eq(boardType))
                 .fetchOne();
 
-        List<BoardResponseDTO> boardResponseDTOList = BoardMapper.INSTANCE.toDtoList(boardList);
+        List<BoardResponseDTO> boardResponseDTOList = BoardResponseMapper.INSTANCE.toDtoList(boardList);
 
         return new PageImpl<>(boardResponseDTOList, pageable, count);
     }
@@ -68,7 +67,7 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
             throw new NotFoundException("Could not found board id : " + id);
         }
 
-        return BoardMapper.INSTANCE.toDto(board1);
+        return BoardResponseMapper.INSTANCE.toDto(board1);
 
     }
 }

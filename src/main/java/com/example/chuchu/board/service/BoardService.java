@@ -4,6 +4,8 @@ import com.example.chuchu.board.dto.BoardRequestDTO;
 import com.example.chuchu.board.dto.BoardResponseDTO;
 import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.board.entity.BoardType;
+import com.example.chuchu.board.mapper.BoardRequestMapper;
+import com.example.chuchu.board.mapper.BoardResponseMapper;
 import com.example.chuchu.board.repository.BoardRepository;
 import com.example.chuchu.category.entity.Category;
 import com.example.chuchu.category.repository.CategoryRepository;
@@ -32,6 +34,7 @@ public class BoardService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+    private final BoardRequestMapper boardRequestMapper;
 
     @Transactional(readOnly = true)
     public Board findById(Long id) {
@@ -44,7 +47,7 @@ public class BoardService {
     }
 
     @Transactional
-    public Board insert(String boardType, BoardRequestDTO boardRequestDTO) {
+    public Board insert(BoardRequestDTO boardRequestDTO) {
 
         Member member = memberRepository.findById(boardRequestDTO.getMemberId())
                 .orElseThrow(() -> new NotFoundException("Could not found member id : " + boardRequestDTO.getMemberId()));
@@ -52,15 +55,9 @@ public class BoardService {
         Category category = categoryRepository.findById(boardRequestDTO.getCateId())
                 .orElseThrow(() -> new NotFoundException("Could not found category id : " + boardRequestDTO.getCateId()));
 
-        Board board = Board.builder()
-                .title(boardRequestDTO.getTitle())
-                .hashTag(boardRequestDTO.getHashTag())
-                .content(boardRequestDTO.getContent())
-                .isSecret(true)
-                .boardType(BoardType.valueOf(boardType.toUpperCase()))
-                .writer(member)
-                .category(category)
-                .build();
+        Board board = boardRequestMapper.toEntity(boardRequestDTO);
+        board.updateMember(member);
+        board.updateCategory(category);
 
         return boardRepository.save(board);
     }
@@ -72,7 +69,7 @@ public class BoardService {
         Category category = categoryRepository.findById(boardRequestDTO.getCateId())
                 .orElseThrow(() -> new NotFoundException("Could not found category id : " + boardRequestDTO.getCateId()));
 
-        return boardRepository.save(board.updateBoard(boardRequestDTO, category));
+        return board.updateBoard(boardRequestDTO, category);
     }
 
     @Transactional
@@ -92,6 +89,7 @@ public class BoardService {
         return boardRepository.getBoardList(query, boardType, pageable);
     }
 
+    @Transactional
     public BoardResponseDTO getBoardWithTag(Long id) {
 
         BoardResponseDTO boardResponseDTO = boardRepository.getBoardWithTag(id);

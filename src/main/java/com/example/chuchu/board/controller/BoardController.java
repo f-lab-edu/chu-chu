@@ -3,7 +3,7 @@ package com.example.chuchu.board.controller;
 import com.example.chuchu.board.dto.BoardRequestDTO;
 import com.example.chuchu.board.dto.BoardResponseDTO;
 import com.example.chuchu.board.entity.BoardType;
-import com.example.chuchu.board.mapper.BoardMapper;
+import com.example.chuchu.board.mapper.BoardResponseMapper;
 import com.example.chuchu.board.service.BoardService;
 import com.example.chuchu.common.global.PageRequest;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import static com.example.chuchu.common.global.HttpResponseEntity.success;
 public class BoardController {
 
     private final BoardService boardService;
-    private final BoardMapper boardMapper;
+    private final BoardResponseMapper boardResponseMapper;
 
     @GetMapping("/{boardType}")
     public ResponseResult<?> getList(@PathVariable(value = "boardType") String boardType,
@@ -49,20 +49,19 @@ public class BoardController {
         return success(boardService.getBoardWithTag(id));
     }
 
-    @PostMapping("/{boardType}")
-    public ResponseResult<BoardResponseDTO> insert(@PathVariable(value = "boardType") String boardType,
-                                                   @RequestBody @Valid BoardRequestDTO boardRequestDTO) {
-        return success(boardMapper.toDto(boardService.insert(boardType, boardRequestDTO)));
+    @PostMapping
+    public ResponseResult<BoardResponseDTO> insert(@RequestBody @Valid BoardRequestDTO boardRequestDTO) {
+        return success(boardResponseMapper.toDto(boardService.insert(boardRequestDTO)));
     }
 
     @PutMapping("/{id}")
     public ResponseResult<BoardResponseDTO> update(@PathVariable Long id,
                                                    @RequestBody @Valid BoardRequestDTO boardRequestDTO) {
-        return success(boardMapper.toDto(boardService.update(boardRequestDTO, id)));
+        return success(boardResponseMapper.toDto(boardService.update(boardRequestDTO, id)));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseResult<BoardResponseDTO> delete(@PathVariable long id) {
-        return success(boardMapper.toDto(boardService.delete(id)));
+    public ResponseResult<BoardResponseDTO> delete(@PathVariable Long id) {
+        return success(boardResponseMapper.toDto(boardService.delete(id)));
     }
 }

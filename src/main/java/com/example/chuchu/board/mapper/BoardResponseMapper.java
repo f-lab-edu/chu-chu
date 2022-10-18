@@ -7,6 +7,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
-public interface BoardMapper extends GenericMapper<BoardResponseDTO, Board> {
-    BoardMapper INSTANCE = Mappers.getMapper(BoardMapper.class);
+public interface BoardResponseMapper extends GenericMapper<BoardResponseDTO, Board> {
+    BoardResponseMapper INSTANCE = Mappers.getMapper(BoardResponseMapper.class);
 }
