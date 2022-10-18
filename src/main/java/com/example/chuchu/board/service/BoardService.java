@@ -18,7 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 import static lombok.Lombok.checkNotNull;
 
@@ -64,9 +66,13 @@ public class BoardService {
     }
 
     @Transactional
-    public Board update(BoardResponseDTO boardResponseDto, long id) {
+    public Board update(BoardRequestDTO boardRequestDTO, Long id) {
+
         Board board = findById(id);
-        return boardRepository.save(board.updateBoard(boardResponseDto));
+        Category category = categoryRepository.findById(boardRequestDTO.getCateId())
+                .orElseThrow(() -> new NotFoundException("Could not found category id : " + boardRequestDTO.getCateId()));
+
+        return boardRepository.save(board.updateBoard(boardRequestDTO, category));
     }
 
     @Transactional
@@ -78,8 +84,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public PageImpl<BoardResponseDTO> getBoardList(String query, BoardType boardType, Pageable pageable) {
-        // query 에 들어올 수 있는 값 : 제목
-        // pageable의 정렬 기준 : 최신순, 조회순, 좋아요 순
+
         if (query == null){
             query = "";
         }

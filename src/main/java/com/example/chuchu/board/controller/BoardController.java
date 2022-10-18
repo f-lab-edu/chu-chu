@@ -41,6 +41,8 @@ public class BoardController {
         return success(boardList);
     }
 
+
+    //TODO boardType이 필요없는데...위랑 중복된다. 고민해보자
     @GetMapping("/{boardType}/{id}")
     public ResponseResult<BoardResponseDTO> getOne(@PathVariable(value = "boardType") String boardType,
                                                    @PathVariable(value = "id") Long id) {
@@ -50,14 +52,13 @@ public class BoardController {
     @PostMapping("/{boardType}")
     public ResponseResult<BoardResponseDTO> insert(@PathVariable(value = "boardType") String boardType,
                                                    @RequestBody @Valid BoardRequestDTO boardRequestDTO) {
-        boardService.insert(boardType, boardRequestDTO);
-        return null;
-//        return success(boardMapper.toDto(boardService.insert(boardResponseDto)));
+        return success(boardMapper.toDto(boardService.insert(boardType, boardRequestDTO)));
     }
 
     @PutMapping("/{id}")
-    public ResponseResult<BoardResponseDTO> update(@RequestBody @Valid BoardResponseDTO boardResponseDto, @PathVariable long id) {
-        return success(boardMapper.toDto(boardService.update(boardResponseDto, id)));
+    public ResponseResult<BoardResponseDTO> update(@PathVariable Long id,
+                                                   @RequestBody @Valid BoardRequestDTO boardRequestDTO) {
+        return success(boardMapper.toDto(boardService.update(boardRequestDTO, id)));
     }
 
     @DeleteMapping("/{id}")

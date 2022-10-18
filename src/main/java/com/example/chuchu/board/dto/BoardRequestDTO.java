@@ -16,4 +16,5 @@ public class BoardRequestDTO {
     private String title;
     private String hashTag;
     private String content;
+    private Boolean isSecret;
 }

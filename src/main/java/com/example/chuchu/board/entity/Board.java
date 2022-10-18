@@ -1,5 +1,6 @@
 package com.example.chuchu.board.entity;
 
+import com.example.chuchu.board.dto.BoardRequestDTO;
 import com.example.chuchu.board.dto.BoardResponseDTO;
 import com.example.chuchu.category.entity.Category;
 import com.example.chuchu.common.global.BaseTimeEntity;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -19,6 +21,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @DynamicInsert
+@DynamicUpdate
 @Table(name = "board")
 public class Board extends BaseTimeEntity {
 
@@ -79,11 +82,12 @@ public class Board extends BaseTimeEntity {
         this.category = category;
     }
 
-    public Board updateBoard(BoardResponseDTO boardResponseDto) {
-        this.title = boardResponseDto.getTitle();
-        this.content = boardResponseDto.getContent();
-        this.likeCount = boardResponseDto.getLikeCount();
-        this.isSecret = boardResponseDto.getIsSecret();
+    public Board updateBoard(BoardRequestDTO boardRequestDTO, Category category) {
+        this.title = boardRequestDTO.getTitle();
+        this.hashTag = boardRequestDTO.getHashTag();
+        this.content = boardRequestDTO.getContent();
+        this.isSecret = boardRequestDTO.getIsSecret();
+        this.category = category;
         return this;
     }
 }
