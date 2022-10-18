@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "tag")
-public class Tag extends BaseTimeEntity {
+public class HashTag extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class Tag extends BaseTimeEntity {
     private String name;
 
     @Builder
-    public Tag(Long id, String name) {
+    public HashTag(Long id, String name) {
         this.id = id;
         this.name = name;
     }

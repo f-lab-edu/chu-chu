@@ -16,6 +16,7 @@ import java.util.List;
 public class BoardResponseDTO {
     private Long id;
     private String title;
+    private String hashTag;
     private String content;
     private Integer likeCount;
     private Integer viewCount;
@@ -23,17 +24,17 @@ public class BoardResponseDTO {
     private Boolean isSecret;
     private MemberDTO writer;
     private BoardType boardType;
-    private List<String> tagList;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<CommentDTO> commentDTOList;
 
     @Builder
-    public BoardResponseDTO(Long id, String title, String content, Integer likeCount, Integer viewCount,
-                            Integer commentCount, Boolean isSecret, BoardType boardType, MemberDTO writer, List<String> tagList,
+    public BoardResponseDTO(Long id, String title, String hashTag, String content, Integer likeCount, Integer viewCount,
+                            Integer commentCount, Boolean isSecret, BoardType boardType, MemberDTO writer,
                             List<CommentDTO> commentDTOList, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
+        this.hashTag = hashTag;
         this.content = content;
         this.likeCount = likeCount;
         this.viewCount = viewCount;
@@ -41,7 +42,6 @@ public class BoardResponseDTO {
         this.boardType = boardType;
         this.isSecret = isSecret;
         this.writer = writer;
-        this.tagList = tagList;
         this.commentDTOList = commentDTOList;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

@@ -1,5 +1,6 @@
 package com.example.chuchu.board.service;
 
+import com.example.chuchu.board.dto.BoardRequestDTO;
 import com.example.chuchu.board.dto.BoardResponseDTO;
 import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.board.entity.BoardType;
@@ -36,9 +37,11 @@ public class BoardService {
     }
 
     @Transactional
-    public Board insert(BoardResponseDTO boardResponseDto) {
-        Board board = BoardMapper.INSTANCE.toEntity(boardResponseDto);
-        return boardRepository.save(board);
+    public Board insert(BoardRequestDTO boardRequestDTO) {
+        //TODO 저장할 때 필요한 정보 ()
+
+//        Board board = BoardMapper.INSTANCE.toEntity(boardRequestDTO);
+        return null;
     }
 
     @Transactional

@@ -29,6 +29,9 @@ public class Board extends BaseTimeEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Column(name = "hash_tag")
+    private String hashTag;
+
     @Column(name = "content", nullable = false)
     private String content;
 
@@ -59,14 +62,12 @@ public class Board extends BaseTimeEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "board", fetch = LAZY)
-    private List<BoardTagMap> boardTagMapList;
-
     @Builder
-    public Board(Long id, String title, String content, Integer likeCount, Integer viewCount, Integer commentCount,
-                 Boolean isSecret, Member writer, BoardType boardType, Category category, List<BoardTagMap> boardTagMapList) {
+    public Board(Long id, String title, String hashTag, String content, Integer likeCount, Integer viewCount, Integer commentCount,
+                 Boolean isSecret, Member writer, BoardType boardType, Category category) {
         this.id = id;
         this.title = title;
+        this.hashTag = hashTag;
         this.content = content;
         this.likeCount = likeCount;
         this.viewCount = viewCount;
@@ -75,7 +76,6 @@ public class Board extends BaseTimeEntity {
         this.writer = writer;
         this.boardType = boardType;
         this.category = category;
-        this.boardTagMapList = boardTagMapList;
     }
 
     public Board updateBoard(BoardResponseDTO boardResponseDto) {

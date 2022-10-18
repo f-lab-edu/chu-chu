@@ -3,6 +3,7 @@ package com.example.chuchu.board.repository;
 import com.example.chuchu.board.dto.BoardResponseDTO;
 import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.board.entity.BoardType;
+import com.example.chuchu.board.mapper.BoardMapper;
 import com.example.chuchu.common.errors.exception.NotFoundException;
 import com.example.chuchu.member.dto.MemberDTO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,9 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.chuchu.board.entity.QBoard.board;
-import static com.example.chuchu.board.entity.QBoardTagMap.boardTagMap;
 import static com.example.chuchu.board.entity.QCategory.category;
-import static com.example.chuchu.board.entity.QTag.tag;
 import static com.example.chuchu.member.entity.QMember.member;
 
 @RequiredArgsConstructor
@@ -29,13 +28,12 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
     @Override
     public PageImpl<BoardResponseDTO> getBoardList(String query, BoardType boardType, Pageable pageable) {
 
-        List<Long> ids = queryFactory.
-                select(board.id)
-                .from(board)
+        List<Board> boardList = queryFactory
+                .selectFrom(board)
+                .leftJoin(board.category, category).fetchJoin()
+                .leftJoin(board.writer, member).fetchJoin()
                 .where(board.title.contains(query),
-                       board.boardType.eq(boardType))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                        board.boardType.eq(boardType))
                 .fetch();
 
         Long count = queryFactory
@@ -45,19 +43,7 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
                        board.boardType.eq(boardType))
                 .fetchOne();
 
-        List<Board> boardList = queryFactory
-                .selectFrom(board).distinct()
-                .leftJoin(board.category, category).fetchJoin()
-                .leftJoin(board.writer, member).fetchJoin()
-                .leftJoin(board.boardTagMapList, boardTagMap).fetchJoin()
-                .leftJoin(boardTagMap.tag, tag).fetchJoin()
-                .where(board.id.in(ids))
-                .fetch();
-
-        List<BoardResponseDTO> boardResponseDTOList = boardList.stream().map(e -> new BoardResponseDTO(e.getId(), e.getTitle(), e.getContent(), e.getLikeCount(), e.getViewCount(),
-                e.getCommentCount(), e.getIsSecret(), e.getBoardType(), (e.getWriter() != null) ? new MemberDTO(e.getWriter()) : null,
-                (e.getBoardTagMapList() != null) ? e.getBoardTagMapList().stream().map(l -> l.getTag().getName()).collect(Collectors.toList()) : null,
-                null, e.getCreatedAt(), e.getUpdatedAt())).collect(Collectors.toList());
+        List<BoardResponseDTO> boardResponseDTOList = BoardMapper.INSTANCE.toDtoList(boardList);
 
         return new PageImpl<>(boardResponseDTOList, pageable, count);
     }
@@ -75,8 +61,6 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
                 .from(board)
                 .leftJoin(board.category, category).fetchJoin()
                 .leftJoin(board.writer, member).fetchJoin()
-                .leftJoin(board.boardTagMapList, boardTagMap).fetchJoin()
-                .leftJoin(boardTagMap.tag, tag).fetchJoin()
                 .where(board.id.eq(id))
                 .fetchOne();
 
@@ -84,10 +68,7 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
             throw new NotFoundException("Could not found board id : " + id);
         }
 
-        return new BoardResponseDTO(board1.getId(), board1.getTitle(), board1.getContent(), board1.getLikeCount(), board1.getViewCount(),
-                board1.getCommentCount(), board1.getIsSecret(), board1.getBoardType(), (board1.getWriter() != null) ?new MemberDTO(board1.getWriter()) : null,
-                (board1.getBoardTagMapList() != null) ? board1.getBoardTagMapList().stream().map(e -> e.getTag().getName()).collect(Collectors.toList()) : null,
-                null, board1.getCreatedAt(), board1.getUpdatedAt());
+        return BoardMapper.INSTANCE.toDto(board1);
 
     }
 }
