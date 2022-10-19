@@ -53,18 +53,20 @@ public class Comment extends BaseTimeEntity {
         this.content = content;
     }
 
-    public Comment updateWriter(Member member) {
+    public void updateWriter(Member member) {
         this.writer = member;
-        return this;
     }
 
-    public Comment updateBoard(Board board) {
+    public void updateBoard(Board board) {
         this.board = board;
-        return this;
     }
 
-    public Comment updateParent(Comment comment) {
+    public void updateParent(Comment comment) {
         this.parent = comment;
+    }
+
+    public Comment changeIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
         return this;
     }
 }

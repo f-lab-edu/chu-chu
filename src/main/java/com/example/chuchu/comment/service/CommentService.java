@@ -23,7 +23,7 @@ public class CommentService {
     private final CommentRequestMapper commentRequestMapper;
 
     @Transactional
-    public void insert(Long boardId, CommentRequestDTO commentRequestDTO) {
+    public Comment insert(Long boardId, CommentRequestDTO commentRequestDTO) {
 
         Member member = memberRepository.findById(commentRequestDTO.getMemberId())
                 .orElseThrow(() -> new NotFoundException("Could not found member id : " + commentRequestDTO.getMemberId()));
@@ -33,7 +33,7 @@ public class CommentService {
 
         Comment comment = commentRequestMapper.toEntity(commentRequestDTO);
 
-        Comment parentComment = null;
+        Comment parentComment;
         if (commentRequestDTO.getParentId() != null) {
             parentComment = commentRepository.findById(commentRequestDTO.getParentId())
                     .orElseThrow(() -> new NotFoundException("Could not found comment id : " + commentRequestDTO.getParentId()));
@@ -43,7 +43,26 @@ public class CommentService {
         comment.updateWriter(member);
         comment.updateBoard(board);
 
-        commentRepository.save(comment);
+        return commentRepository.save(comment);
 
+    }
+
+    @Transactional
+    public void delete(Long commentId) {
+        Comment comment = commentRepository.findCommentByIdWithParent(commentId)
+                .orElseThrow(() -> new NotFoundException("Could not found comment id : " + commentId));
+        if(comment.getChildren().size() != 0) { // 자식이 있으면 상태만 변경
+            comment.changeIsDeleted(true);
+        } else { // 삭제 가능한 조상 댓글을 구해서 삭제
+            commentRepository.delete(getDeletableAncestorComment(comment));
+        }
+    }
+
+    private Comment getDeletableAncestorComment(Comment comment) {
+        Comment parent = comment.getParent(); // 현재 댓글의 부모를 구함
+        if(parent != null && parent.getChildren().size() == 1 && parent.getIsDeleted())
+            // 부모가 있고, 부모의 자식이 1개(지금 삭제하는 댓글)이고, 부모의 삭제 상태가 TRUE인 댓글이라면 재귀
+            return getDeletableAncestorComment(parent);
+        return comment; // 삭제해야하는 댓글 반환
     }
 }

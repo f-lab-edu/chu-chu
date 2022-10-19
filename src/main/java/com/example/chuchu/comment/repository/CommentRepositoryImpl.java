@@ -6,10 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 import static com.example.chuchu.comment.dto.CommentResponseDTO.convertCommentToDto;
@@ -41,5 +38,17 @@ public class CommentRepositoryImpl implements CommentCustomRepository{
             else commentResponseDTOList.add(commentResponseDTO);
         });
         return commentResponseDTOList;
+    }
+
+    @Override
+    public Optional<Comment> findCommentByIdWithParent(Long id) {
+
+        Comment selectedComment = queryFactory.select(comment)
+                .from(comment)
+                .leftJoin(comment.parent).fetchJoin()
+                .where(comment.id.eq(id))
+                .fetchOne();
+
+        return Optional.ofNullable(selectedComment);
     }
 }
