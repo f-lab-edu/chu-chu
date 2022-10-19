@@ -35,9 +35,10 @@ public class CommentController {
 
     @DeleteMapping("/{commentId}")
     //TODO return Type 명시하기
-    public ResponseResult<?> delete(@PathVariable Long commentId) {
+    public ResponseResult<Comment> delete(@PathVariable Long commentId) {
         commentService.delete(commentId);
-        return null;
+        // TODO 뭘 return 하는게 좋을지 고민해보자
+        return success(null);
     }
 
 }
