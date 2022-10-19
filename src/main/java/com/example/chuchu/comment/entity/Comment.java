@@ -6,6 +6,8 @@ import com.example.chuchu.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 
@@ -17,6 +19,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@DynamicInsert
 @Table(name = "comment")
 public class Comment extends BaseTimeEntity {
 
@@ -28,7 +31,8 @@ public class Comment extends BaseTimeEntity {
     @Column(nullable = false, length = 1000)
     private String content;
 
-
+    @ColumnDefault("FALSE")
+    @Column(nullable = false)
     private Boolean isDeleted;
 
     @ManyToOne(fetch = LAZY)
@@ -45,4 +49,22 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "board_id")
     private Board board;
 
+    public Comment(String content) {
+        this.content = content;
+    }
+
+    public Comment updateWriter(Member member) {
+        this.writer = member;
+        return this;
+    }
+
+    public Comment updateBoard(Board board) {
+        this.board = board;
+        return this;
+    }
+
+    public Comment updateParent(Comment comment) {
+        this.parent = comment;
+        return this;
+    }
 }

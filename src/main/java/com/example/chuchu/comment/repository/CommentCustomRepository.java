@@ -1,10 +1,10 @@
 package com.example.chuchu.comment.repository;
 
-import com.example.chuchu.comment.dto.CommentDTO;
+import com.example.chuchu.comment.dto.CommentResponseDTO;
 
 import java.util.List;
 
 public interface CommentCustomRepository {
 
-    List<CommentDTO> findByBoardId(Long id);
+    List<CommentResponseDTO> findByBoardId(Long id);
 }

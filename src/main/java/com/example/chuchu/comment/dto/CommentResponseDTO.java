@@ -11,22 +11,22 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CommentDTO {
+public class CommentResponseDTO {
 
     private Long id;
     private String content;
     private MemberDTO writer;
-    private List<CommentDTO> children = new ArrayList<>();
+    private List<CommentResponseDTO> children = new ArrayList<>();
 
-    public CommentDTO(Long id, String content, MemberDTO writer) {
+    public CommentResponseDTO(Long id, String content, MemberDTO writer) {
         this.id = id;
         this.content = content;
         this.writer = writer;
     }
 
-    public static CommentDTO convertCommentToDto(Comment comment) {
+    public static CommentResponseDTO convertCommentToDto(Comment comment) {
         return comment.getIsDeleted() ?
-                new CommentDTO(comment.getId(), "삭제된 댓글입니다.", null) :
-                new CommentDTO(comment.getId(), comment.getContent(), new MemberDTO(comment.getWriter()));
+                new CommentResponseDTO(comment.getId(), "삭제된 댓글입니다.", null) :
+                new CommentResponseDTO(comment.getId(), comment.getContent(), new MemberDTO(comment.getWriter()));
     }
 }
