@@ -1,18 +1,15 @@
 package com.example.chuchu.comment.repository;
 
-import com.example.chuchu.comment.dto.CommentDTO;
+import com.example.chuchu.comment.dto.CommentResponseDTO;
 import com.example.chuchu.comment.entity.Comment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
-import static com.example.chuchu.comment.dto.CommentDTO.convertCommentToDto;
+import static com.example.chuchu.comment.dto.CommentResponseDTO.convertCommentToDto;
 import static com.example.chuchu.comment.entity.QComment.comment;
 
 @RequiredArgsConstructor
@@ -22,7 +19,7 @@ public class CommentRepositoryImpl implements CommentCustomRepository{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<CommentDTO> findByBoardId(Long id) {
+    public List<CommentResponseDTO> findByBoardId(Long id) {
 
         List<Comment> comments = queryFactory.selectFrom(comment)
                 .leftJoin(comment.parent).fetchJoin()
@@ -31,15 +28,27 @@ public class CommentRepositoryImpl implements CommentCustomRepository{
                         comment.createdAt.asc())
                 .fetch();
 
-        List<CommentDTO> commentDTOList = new ArrayList<>();
-        Map<Long, CommentDTO> commentDTOHashMap = new HashMap<>();
+        List<CommentResponseDTO> commentResponseDTOList = new ArrayList<>();
+        Map<Long, CommentResponseDTO> commentDTOHashMap = new HashMap<>();
 
         comments.forEach(c -> {
-            CommentDTO commentDTO = convertCommentToDto(c);
-            commentDTOHashMap.put(commentDTO.getId(), commentDTO);
-            if (c.getParent() != null) commentDTOHashMap.get(c.getParent().getId()).getChildren().add(commentDTO);
-            else commentDTOList.add(commentDTO);
+            CommentResponseDTO commentResponseDTO = convertCommentToDto(c);
+            commentDTOHashMap.put(commentResponseDTO.getId(), commentResponseDTO);
+            if (c.getParent() != null) commentDTOHashMap.get(c.getParent().getId()).getChildren().add(commentResponseDTO);
+            else commentResponseDTOList.add(commentResponseDTO);
         });
-        return commentDTOList;
+        return commentResponseDTOList;
+    }
+
+    @Override
+    public Optional<Comment> findCommentByIdWithParent(Long id) {
+
+        Comment selectedComment = queryFactory.select(comment)
+                .from(comment)
+                .leftJoin(comment.parent).fetchJoin()
+                .where(comment.id.eq(id))
+                .fetchOne();
+
+        return Optional.ofNullable(selectedComment);
     }
 }

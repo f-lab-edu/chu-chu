@@ -5,11 +5,10 @@ import com.example.chuchu.board.dto.BoardResponseDTO;
 import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.board.entity.BoardType;
 import com.example.chuchu.board.mapper.BoardRequestMapper;
-import com.example.chuchu.board.mapper.BoardResponseMapper;
 import com.example.chuchu.board.repository.BoardRepository;
 import com.example.chuchu.category.entity.Category;
 import com.example.chuchu.category.repository.CategoryRepository;
-import com.example.chuchu.comment.dto.CommentDTO;
+import com.example.chuchu.comment.dto.CommentResponseDTO;
 import com.example.chuchu.comment.repository.CommentRepository;
 import com.example.chuchu.common.errors.exception.NotFoundException;
 import com.example.chuchu.member.entity.Member;
@@ -20,9 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 import static lombok.Lombok.checkNotNull;
 
@@ -93,8 +90,8 @@ public class BoardService {
     public BoardResponseDTO getBoardWithTag(Long id) {
 
         BoardResponseDTO boardResponseDTO = boardRepository.getBoardWithTag(id);
-        List<CommentDTO> commentDTOList = commentRepository.findByBoardId(id);
-        boardResponseDTO.setCommentDTOList(commentDTOList);
+        List<CommentResponseDTO> commentResponseDTOList = commentRepository.findByBoardId(id);
+        boardResponseDTO.setCommentResponseDTOList(commentResponseDTOList);
         return boardResponseDTO;
     }
 }
