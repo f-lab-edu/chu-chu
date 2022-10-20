@@ -68,6 +68,7 @@ public class CommentService {
         return comment; // 삭제해야하는 댓글 반환
     }
 
+    @Transactional
     public void update(Long commentId, CommentRequestDTO commentRequestDTO) {
 
         Comment comment = commentRepository.findById(commentId)
