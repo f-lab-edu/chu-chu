@@ -33,6 +33,13 @@ public class CommentController {
         return success(null);
     }
 
+    @PutMapping("/{commentId}")
+    public ResponseResult<Comment> update(@PathVariable Long commentId, @RequestBody CommentRequestDTO commentRequestDTO) {
+        commentService.update(commentId, commentRequestDTO);
+        // TODO 뭘 return 하는게 좋을지 고민해보자
+        return success(null);
+    }
+
     @DeleteMapping("/{commentId}")
     //TODO return Type 명시하기
     public ResponseResult<Comment> delete(@PathVariable Long commentId) {

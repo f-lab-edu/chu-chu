@@ -27,10 +27,10 @@ public class BoardController {
     private final BoardResponseMapper boardResponseMapper;
 
     @GetMapping("/{boardType}")
-    public ResponseResult<?> getList(@PathVariable(value = "boardType") String boardType,
-                                     @RequestParam(value = "query", required = false) String query,
-                                     @RequestParam(value = "page", required = false) Integer page,
-                                     @RequestParam(value = "sort", required = false) String sort) {
+    public ResponseResult<PageImpl<BoardResponseDTO>> getList(@PathVariable(value = "boardType") String boardType,
+                                                              @RequestParam(value = "query", required = false) String query,
+                                                              @RequestParam(value = "page", required = false) Integer page,
+                                                              @RequestParam(value = "sort", required = false) String sort) {
 
         //TODO ENUM 설정 해볼 것
         BoardType boardType1 = BoardType.valueOf(boardType.toUpperCase());

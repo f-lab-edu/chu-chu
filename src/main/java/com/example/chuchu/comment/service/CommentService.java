@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -64,5 +66,13 @@ public class CommentService {
             // 부모가 있고, 부모의 자식이 1개(지금 삭제하는 댓글)이고, 부모의 삭제 상태가 TRUE인 댓글이라면 재귀
             return getDeletableAncestorComment(parent);
         return comment; // 삭제해야하는 댓글 반환
+    }
+
+    public void update(Long commentId, CommentRequestDTO commentRequestDTO) {
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundException("Could not found comment id : " + commentId));
+        //TODO 해당 메서드를 호출하는 사옹자와 댓글을 작성한 작성자가 같은지 확인하는 로직이 필요함
+        comment.updateContent(commentRequestDTO.getContent());
     }
 }

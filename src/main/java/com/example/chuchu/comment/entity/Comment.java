@@ -65,8 +65,11 @@ public class Comment extends BaseTimeEntity {
         this.parent = comment;
     }
 
-    public Comment changeIsDeleted(Boolean isDeleted) {
+    public void changeIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
-        return this;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
     }
 }
