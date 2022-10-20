@@ -41,11 +41,8 @@ public class BoardController {
         return success(boardList);
     }
 
-
-    //TODO boardType이 필요없는데...위랑 중복된다. 고민해보자
-    @GetMapping("/{boardType}/{id}")
-    public ResponseResult<BoardResponseDTO> getOne(@PathVariable(value = "boardType") String boardType,
-                                                   @PathVariable(value = "id") Long id) {
+    @GetMapping("/detail/{id}")
+    public ResponseResult<BoardResponseDTO> getOne(@PathVariable(value = "id") Long id) {
         return success(boardService.getBoardWithTag(id));
     }
 
