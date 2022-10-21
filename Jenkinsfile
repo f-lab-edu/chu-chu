@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    tools{
-        gradle '7.4'
-    }    // 내가 쓸 build gradle. '' 안에 들어갈 것은 gradle 이름이다.
     stages{
         stage('Ready'){
             steps{
