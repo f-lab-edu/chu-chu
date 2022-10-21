@@ -46,4 +46,19 @@ public class BoardResponseDTO {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    @Builder
+    public BoardResponseDTO(Long id, String title, String hashTag, String content, Integer likeCount,
+                            Integer viewCount, Integer commentCount, Boolean isSecret, MemberDTO writer, BoardType boardType) {
+        this.id = id;
+        this.title = title;
+        this.hashTag = hashTag;
+        this.content = content;
+        this.likeCount = likeCount;
+        this.viewCount = viewCount;
+        this.commentCount = commentCount;
+        this.isSecret = isSecret;
+        this.writer = writer;
+        this.boardType = boardType;
+    }
 }
