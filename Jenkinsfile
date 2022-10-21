@@ -11,7 +11,7 @@ pipeline {
             steps{
                 sh "chmod +x gradlew;"
                 sh "./gradlew clean;"
-                sh "./gradlew build -x test;
+                sh "./gradlew build -x test;"
             }
         }   // build 시 test 없이 진행하고, test는 추후에 거르기 위해 이렇게 이용함.
 
