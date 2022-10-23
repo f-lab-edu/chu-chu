@@ -4,7 +4,6 @@ import com.example.chuchu.board.dto.BoardResponseDTO;
 import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.board.entity.BoardType;
 import com.example.chuchu.board.mapper.BoardResponseMapper;
-import com.example.chuchu.category.entity.QCategory;
 import com.example.chuchu.common.errors.exception.NotFoundException;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +38,7 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
                 .select(board.count())
                 .from(board)
                 .where(board.title.contains(query),
-                       board.boardType.eq(boardType))
+                        board.boardType.eq(boardType))
                 .fetchOne();
 
         List<BoardResponseDTO> boardResponseDTOList = BoardResponseMapper.INSTANCE.toDtoList(boardList);
