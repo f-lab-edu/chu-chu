@@ -13,5 +13,7 @@ public interface BoardCustomRepository {
 
     BoardResponseDTO getBoardWithTag(Long id);
 
-    void updateCount(Board board, boolean b);
+    void addLikeCount(Board board);
+
+    void subLikeCount(Board board);
 }
