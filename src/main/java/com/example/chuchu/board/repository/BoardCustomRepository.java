@@ -1,6 +1,7 @@
 package com.example.chuchu.board.repository;
 
 import com.example.chuchu.board.dto.BoardResponseDTO;
+import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.board.entity.BoardType;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -11,4 +12,6 @@ public interface BoardCustomRepository {
     PageImpl<BoardResponseDTO> getBoardList(String query, BoardType boardType, Pageable pageable);
 
     BoardResponseDTO getBoardWithTag(Long id);
+
+    void updateCount(Board board, boolean b);
 }

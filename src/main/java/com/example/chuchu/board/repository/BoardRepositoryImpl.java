@@ -70,4 +70,19 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
         return BoardResponseMapper.INSTANCE.toDto(board1);
 
     }
+
+    @Override
+    public void updateCount(Board board1, boolean b) {
+        if (b) {
+            queryFactory.update(board)
+                    .set(board.likeCount, board.likeCount.add(1))
+                    .where(board.eq(board1))
+                    .execute();
+        } else {
+            queryFactory.update(board)
+                    .set(board.likeCount, board.likeCount.subtract(1))
+                    .where(board.eq(board1))
+                    .execute();
+        }
+    }
 }
