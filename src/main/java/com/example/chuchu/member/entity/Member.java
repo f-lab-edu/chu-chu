@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -45,4 +46,17 @@ public class Member extends BaseTimeEntity {
         this.level = level;
         this.userRole = userRole;
     }
+
+    /**
+     * 패스워드 암호화
+     *
+     * @param passwordEncoder 암호화 할 인코더 클래스
+     * @return 변경된 유저 Entity
+     */
+    public Member hashPassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
+        return this;
+    }
+
+
 }

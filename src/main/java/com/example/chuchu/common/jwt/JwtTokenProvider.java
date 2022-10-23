@@ -1,112 +1,81 @@
 package com.example.chuchu.common.jwt;
 
-import com.example.chuchu.member.entity.Member;
-import com.example.chuchu.member.entity.UserRole;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+
+import static com.example.chuchu.common.jwt.JwtTokenExpireEnum.ACCESS_TOKEN_EXPIRE_TIME;
+import static com.example.chuchu.common.jwt.JwtTokenExpireEnum.REFRESH_TOKEN_EXPIRE_TIME;
 
 @Slf4j
 @Component
 public class JwtTokenProvider {
 
     //todo secretKey 변경
-    private final String ACCESS_TOKEN_KEY = "Thi$i$JwtP@s!!sw0rd0pEn$e$ame!!~";
-    private final String REFRESH_TOKEN_KEY = "Thi$i$JwtP@s!!sw0rd0pEn$e$ame!!!";
+    @Value("${jwt.secret-key}")
+    private String secretKey;
 
-    private final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 5;
-    private final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 10;
+    public Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey(secretKey))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
 
-    private Key createSigningKey(String signKey) {
-        byte[] keyBytes = signKey.getBytes(StandardCharsets.UTF_8);
+    public String getUsername(String token) {
+        return extractAllClaims(token).get("username", String.class);
+    }
+
+    private Key getSigningKey(String secretKey) {
+        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateAccessToken(Member member) {
+    public Boolean isTokenExpired(String token) {
+        Date expiration = extractAllClaims(token).getExpiration();
+        return expiration.before(new Date());
+    }
+
+    public String generateAccessToken(String username) {
+        return doGenerateToken(username, ACCESS_TOKEN_EXPIRE_TIME.getValue());
+    }
+
+    public String generateRefreshToken(String username) {
+        return doGenerateToken(username, REFRESH_TOKEN_EXPIRE_TIME.getValue());
+    }
+
+    private String doGenerateToken(String username, long expireTime) {
+        Claims claims = Jwts.claims();
+        claims.put("username", username);
+
         return Jwts.builder()
-                .setSubject(member.getEmail())
-                .setHeader(createHeader())
-                .setClaims(createClaims(member))
-                .setExpiration(createExpireDate(ACCESS_TOKEN_EXPIRE_TIME))
-                .signWith(createSigningKey(ACCESS_TOKEN_KEY), SignatureAlgorithm.HS256)
+                .setClaims(claims)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expireTime))
+                .signWith(getSigningKey(secretKey), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String generateRefreshToken(Member member) {
-        return Jwts.builder()
-                .setSubject(member.getEmail())
-                .setHeader(createHeader())
-                .setClaims(createClaims(member))
-                .setExpiration(createExpireDate(REFRESH_TOKEN_EXPIRE_TIME))
-                .signWith(createSigningKey(REFRESH_TOKEN_KEY), SignatureAlgorithm.HS256)
-                .compact();
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        String username = getUsername(token);
+        return username.equals(userDetails.getUsername())
+                && !isTokenExpired(token);
     }
 
-    public boolean isValidToken(String token) {
-        try {
-            Claims claims = getClaimsFormToken(token).getBody();
-            log.info("expireTime :" + claims.getExpiration());
-            log.info("email :" + claims.get("email"));
-            log.info("role :" + claims.get("role"));
-            return true;
-
-        } catch (ExpiredJwtException exception) {
-            log.error("Token Expired");
-            return false;
-        } catch (JwtException exception) {
-            log.error("Token Tampered");
-            return false;
-        } catch (NullPointerException exception) {
-            log.error("Token is null");
-            return false;
-        }
-    }
-
-    public String getTokenFromHeader(String header) {
-        return header.split(" ")[1];
-    }
-
-    private Date createExpireDate(long expireTime) {
-        // 토큰 만료시간 설정
-        long curTime = System.currentTimeMillis();
-        return new Date(curTime + expireTime);
-    }
-
-    private Map<String, Object> createHeader() {
-        Map<String, Object> header = new HashMap<>();
-        header.put("typ", "JWT");
-        header.put("alg", "HS256");
-        header.put("regDate", System.currentTimeMillis());
-
-        return header;
-    }
-
-    private Map<String, Object> createClaims(Member member) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("email", member.getEmail());
-        claims.put("role", member.getUserRole());
-
-        return claims;
-    }
-
-    private Jws<Claims> getClaimsFormToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(createSigningKey(ACCESS_TOKEN_KEY))
-                .build().parseClaimsJws(token);
-    }
-
-    public String getUserEmailFromToken(String token) {
-        return (String) getClaimsFormToken(token).getBody().get("email");
-    }
-
-    public UserRole getRoleFromToken(String token) {
-        return (UserRole) getClaimsFormToken(token).getBody().get("role");
+    public long getRemainMilliSeconds(String token) {
+        Date expiration = extractAllClaims(token).getExpiration();
+        Date now = new Date();
+        return expiration.getTime() - now.getTime();
     }
 
 }

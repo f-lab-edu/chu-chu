@@ -1,7 +1,6 @@
 # common
 server:
   port: 80
-
 spring:
   application:
     name: chuchu
@@ -10,6 +9,8 @@ spring:
     port: 6379
   profiles:
     active: dev
+jwt:
+  secret-key: Thi$i$JwtP@s!!sw0rd0pEn$e$ame!!~
 ---
 # dev
 spring:
@@ -41,7 +42,7 @@ spring:
     activate:
       on-profile: prod
   datasource:
-#    url: jdbc:mysql://{}:3306
+    #    url: jdbc:mysql://{}:3306
     url: jdbc:mysql://49.50.165.114:3306/chuchu?serverTimezone=Asia/Seoul
     username: root
     password: chuchu

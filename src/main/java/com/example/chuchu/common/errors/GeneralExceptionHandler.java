@@ -1,7 +1,6 @@
 package com.example.chuchu.common.errors;
 
-import com.example.chuchu.common.errors.exception.NotFoundException;
-import com.example.chuchu.common.errors.exception.UnauthorizedException;
+import com.example.chuchu.common.errors.exception.*;
 import com.example.chuchu.common.global.HttpResponseEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +26,7 @@ public class GeneralExceptionHandler {
         return new ResponseEntity<>(error(message, status), headers, status);
     }
 
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler({NotFoundException.class, UserNotFoundException.class})
     public ResponseEntity<?> handleNotFoundException(Exception e) {
         return newResponse(e, HttpStatus.NOT_FOUND);
     }
@@ -35,6 +34,21 @@ public class GeneralExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<?> handleUnauthorizedException(Exception e) {
         return newResponse(e, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<?> handleForbiddenException(Exception e) {
+        return newResponse(e, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<?> handleConflictException(Exception e) {
+        return newResponse(e, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleBadRequestException(Exception e) {
+        return newResponse(e, HttpStatus.BAD_REQUEST);
     }
 
 }
