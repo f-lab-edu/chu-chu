@@ -4,13 +4,13 @@ import com.example.chuchu.common.config.security.CustomUserDetailsService;
 import com.example.chuchu.common.jwt.repository.LogoutTokenRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -34,7 +34,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String accessToken = getToken(request);
-        if (accessToken != null) {
+        if (!StringUtils.isEmpty(accessToken)) {
             checkLogout(accessToken);
             String username = jwtTokenProvider.getUsername(accessToken);
             if (username != null) {
@@ -48,10 +48,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private String getToken(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7);
+        if (!StringUtils.isEmpty(headerAuth) && StringUtils.startsWith(headerAuth, "Bearer ")) {
+            return StringUtils.substring(headerAuth, 7);
         }
-        return null;
+        return "";
     }
 
     private void checkLogout(String accessToken) {

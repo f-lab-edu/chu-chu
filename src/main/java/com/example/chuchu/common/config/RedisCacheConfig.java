@@ -18,7 +18,7 @@ import java.time.Duration;
 @Configuration
 @RequiredArgsConstructor
 @EnableCaching
-public class CacheConfig {
+public class RedisCacheConfig {
 
     public static final int DEFAULT_EXPIRE_SEC = 60;
 

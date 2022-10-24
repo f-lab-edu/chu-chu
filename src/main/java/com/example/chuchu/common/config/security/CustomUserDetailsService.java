@@ -26,6 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         log.info("email in loadUserByUsername = {}", email);
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("Can't find User"));
-        return new CustomUserDetails(member.getEmail(), member.getPassword(), member.getNickName(), List.of(member.getUserRole().getValue()));
+        return new CustomUserDetails(member.getEmail(), member.getPassword(), member.getNickName(),
+                List.of(member.getUserRole().getValue()));
     }
 }

@@ -59,7 +59,6 @@ public class MemberController {
                 .accessToken(accessToken).refreshToken(refreshToken).build();
 
         memberService.logout(tokenResponseDTO, username);
-        log.info("logout: {}", username);
     }
 
 }
