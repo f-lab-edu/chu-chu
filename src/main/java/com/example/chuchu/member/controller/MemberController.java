@@ -2,6 +2,7 @@ package com.example.chuchu.member.controller;
 
 import com.example.chuchu.common.jwt.JwtTokenProvider;
 import com.example.chuchu.common.jwt.dto.TokenResponseDTO;
+import com.example.chuchu.member.dto.EmailCheckDTO;
 import com.example.chuchu.member.dto.JoinDTO;
 import com.example.chuchu.member.dto.LoginDTO;
 import com.example.chuchu.member.dto.MemberDTO;
@@ -31,6 +32,11 @@ public class MemberController {
     @GetMapping("/list")
     public ResponseResult<List<MemberDTO>> getList() {
         return success(memberMapper.toDtoList(memberService.findAll()));
+    }
+
+    @GetMapping("/checkEmail")
+    public void checkEmail(EmailCheckDTO emailCheckDTO) {
+        memberService.completeSignUp(emailCheckDTO);
     }
 
     @PostMapping("/login")

@@ -1,6 +1,7 @@
 package com.example.chuchu.member.service;
 
 import com.example.chuchu.common.errors.exception.DuplicateResourceException;
+import com.example.chuchu.common.errors.exception.NotFoundException;
 import com.example.chuchu.common.errors.exception.UserNotFoundException;
 import com.example.chuchu.common.jwt.JwtTokenProvider;
 import com.example.chuchu.common.jwt.dto.TokenResponseDTO;
@@ -8,12 +9,14 @@ import com.example.chuchu.common.jwt.entity.LogoutToken;
 import com.example.chuchu.common.jwt.entity.RefreshToken;
 import com.example.chuchu.common.jwt.repository.LogoutTokenRedisRepository;
 import com.example.chuchu.common.jwt.repository.RefreshTokenRedisRepository;
+import com.example.chuchu.member.dto.EmailCheckDTO;
 import com.example.chuchu.member.dto.JoinDTO;
 import com.example.chuchu.member.dto.LoginDTO;
 import com.example.chuchu.member.entity.Member;
 import com.example.chuchu.member.mapper.JoinMapper;
 import com.example.chuchu.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.Authentication;
@@ -39,6 +42,7 @@ public class MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
     private final LogoutTokenRedisRepository logoutTokenRedisRepository;
+    private final MailService mailService;
 
     @Transactional(readOnly = true)
     public List<Member> findAll() {
@@ -70,6 +74,10 @@ public class MemberService {
     public TokenResponseDTO login(LoginDTO loginDTO) {
         String email = loginDTO.getEmail();
         Member member = findByEmail(email);
+
+        if (BooleanUtils.isFalse(member.getEmailVerified())) {
+            throw new NotFoundException("이메일 인증이 되지 않았습니다.");
+        }
 
         if (!passwordEncoder.matches(loginDTO.getPassword(), member.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 맞지 않습니다.");
@@ -199,7 +207,24 @@ public class MemberService {
         Member member = joinMapper.toEntity(joinDTO);
         member.hashPassword(passwordEncoder);
 
+        // 이메일 전송
+        try {
+            mailService.sendMail(member);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         return memberRepository.save(member);
     }
 
+    @Transactional
+    public void completeSignUp(EmailCheckDTO emailCheckDTO) {
+        Member member = findByEmail(emailCheckDTO.getEmail());
+
+        if (!member.isValidEmailCode(emailCheckDTO.getCode())) {
+            throw new NotFoundException("이메일 인증 코드가 틀립니다.");
+        }
+
+        member.completeSignUp();
+    }
 }
