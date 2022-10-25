@@ -43,7 +43,7 @@ pipeline {
                                 sshTransfer(
                                     sourceFiles: "build/libs/chu-chu-0.0.1-SNAPSHOT.jar", //전송할 파일
                                     removePrefix: "build/libs", //파일에서 삭제할 경로가 있다면 작성
-                                    remoteDirectory: "/root/chuchu/jar" //배포할 위치
+                                    remoteDirectory: "/root/chuchu/jar", //배포할 위치
                                     execCommand: "sudo /root/chuchu/deploy.sh" //원격지에서 실행할 커맨드
                                 )
                             ]
