@@ -12,6 +12,7 @@ import com.example.chuchu.common.jwt.repository.RefreshTokenRedisRepository;
 import com.example.chuchu.member.dto.EmailCheckDTO;
 import com.example.chuchu.member.dto.JoinDTO;
 import com.example.chuchu.member.dto.LoginDTO;
+import com.example.chuchu.member.dto.MemberUpdateDTO;
 import com.example.chuchu.member.entity.Member;
 import com.example.chuchu.member.mapper.JoinMapper;
 import com.example.chuchu.member.repository.MemberRepository;
@@ -57,6 +58,11 @@ public class MemberService {
     @Transactional(readOnly = true)
     public boolean existsByEmail(String email) {
         return memberRepository.existsByEmail(email);
+    }
+
+    @Transactional(readOnly = true)
+    public Member findById(Long id) {
+        return memberRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Can't find User"));
     }
 
     /**
@@ -226,5 +232,11 @@ public class MemberService {
         }
 
         member.completeSignUp();
+    }
+
+    @Transactional
+    public Member update(MemberUpdateDTO memberUpdateDTO, Long id) {
+        Member member = findById(id);
+        return member.updateMember(memberUpdateDTO, passwordEncoder);
     }
 }

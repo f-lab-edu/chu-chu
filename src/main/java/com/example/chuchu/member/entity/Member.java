@@ -1,6 +1,7 @@
 package com.example.chuchu.member.entity;
 
 import com.example.chuchu.common.global.BaseTimeEntity;
+import com.example.chuchu.member.dto.MemberUpdateDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -76,4 +77,9 @@ public class Member extends BaseTimeEntity {
         this.emailVerified = true;
     }
 
+    public Member updateMember(MemberUpdateDTO memberUpdateDTO, PasswordEncoder passwordEncoder) {
+        this.nickName = memberUpdateDTO.getNickName();
+        this.password = passwordEncoder.encode(memberUpdateDTO.getPassword());
+        return this;
+    }
 }

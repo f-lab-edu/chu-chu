@@ -2,10 +2,7 @@ package com.example.chuchu.member.controller;
 
 import com.example.chuchu.common.jwt.JwtTokenProvider;
 import com.example.chuchu.common.jwt.dto.TokenResponseDTO;
-import com.example.chuchu.member.dto.EmailCheckDTO;
-import com.example.chuchu.member.dto.JoinDTO;
-import com.example.chuchu.member.dto.LoginDTO;
-import com.example.chuchu.member.dto.MemberDTO;
+import com.example.chuchu.member.dto.*;
 import com.example.chuchu.member.mapper.MemberMapper;
 import com.example.chuchu.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +25,11 @@ public class MemberController {
 
     private final MemberMapper memberMapper;
     private final JwtTokenProvider jwtTokenProvider;
+
+    @GetMapping("/{id}")
+    public ResponseResult<MemberDTO> getOne(@PathVariable Long id) {
+        return success(memberMapper.toDto(memberService.findById(id)));
+    }
 
     @GetMapping("/list")
     public ResponseResult<List<MemberDTO>> getList() {
@@ -65,6 +67,12 @@ public class MemberController {
                 .accessToken(accessToken).refreshToken(refreshToken).build();
 
         memberService.logout(tokenResponseDTO, username);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseResult<MemberDTO> update(@RequestBody @Valid MemberUpdateDTO memberUpdateDTO,
+                                            @PathVariable Long id) {
+        return success(memberMapper.toDto(memberService.update(memberUpdateDTO, id)));
     }
 
 }
