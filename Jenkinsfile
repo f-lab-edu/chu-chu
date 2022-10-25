@@ -47,10 +47,10 @@ pipeline {
                                     execCommand: "sudo /root/chuchu/deploy.sh" //원격지에서 실행할 커맨드
                                 )
                             ]
-                
                         )
+                        ]
                    )
             }
         }
-    }
+   }
 }
