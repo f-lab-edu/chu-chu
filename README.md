@@ -23,8 +23,7 @@
 
 * [#4] 게시글 좋아요 기능 만들기
 
-  https://velog.io/@korea3611/Spring-Boot게시글-좋아요-기능-만들
-
+  https://velog.io/@korea3611/Spring-Boot게시글-좋아요-기능-만들기
 ---
 
 ## 프로젝트 중점사항
