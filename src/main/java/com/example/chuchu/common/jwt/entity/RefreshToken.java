@@ -32,7 +32,7 @@ public class RefreshToken {
         return RefreshToken.builder()
                 .id(username)
                 .refreshToken(refreshToken)
-                .expiration(remainingMilliSeconds / 1000)
+                .expiration(remainingMilliSeconds / 1_000)
                 .build();
     }
 }

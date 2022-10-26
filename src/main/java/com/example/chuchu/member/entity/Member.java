@@ -1,16 +1,17 @@
 package com.example.chuchu.member.entity;
 
 import com.example.chuchu.common.global.BaseTimeEntity;
-import lombok.AccessLevel;
+import com.example.chuchu.member.dto.MemberUpdateDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Entity
 @Table(name = "member")
 public class Member extends BaseTimeEntity {
@@ -37,6 +38,12 @@ public class Member extends BaseTimeEntity {
     @Column(name = "user_role")
     private UserRole userRole;
 
+    @Column(name = "email_code")
+    private String emailCode;
+
+    @Column(name = "email_verified")
+    private Boolean emailVerified;
+
     @Builder
     public Member(Long id, String email, String nickName, String password, Level level, UserRole userRole) {
         this.id = id;
@@ -45,6 +52,10 @@ public class Member extends BaseTimeEntity {
         this.password = password;
         this.level = level;
         this.userRole = userRole;
+        this.emailCode = UUID.randomUUID().toString();
+        this.emailVerified = false;
+        this.level = Level.BRONZE;
+        this.userRole = UserRole.ROLE_USER;
     }
 
     /**
@@ -58,5 +69,17 @@ public class Member extends BaseTimeEntity {
         return this;
     }
 
+    public boolean isValidEmailCode(String code) {
+        return this.emailCode.equals(code);
+    }
 
+    public void completeSignUp() {
+        this.emailVerified = true;
+    }
+
+    public Member updateMember(MemberUpdateDTO memberUpdateDTO, PasswordEncoder passwordEncoder) {
+        this.nickName = memberUpdateDTO.getNickName();
+        this.password = passwordEncoder.encode(memberUpdateDTO.getPassword());
+        return this;
+    }
 }
