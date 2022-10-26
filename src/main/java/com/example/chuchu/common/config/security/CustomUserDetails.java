@@ -1,6 +1,5 @@
 package com.example.chuchu.common.config.security;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    @JsonAlias("username")
     private String email;
     private String password;
     private String nickName;
@@ -36,6 +34,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return email;
     }
