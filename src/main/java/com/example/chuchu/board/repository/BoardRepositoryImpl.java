@@ -71,17 +71,18 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
     }
 
     @Override
-    public void updateCount(Board board1, boolean b) {
-        if (b) {
+    public void addLikeCount(Board selectedBoard) {
             queryFactory.update(board)
                     .set(board.likeCount, board.likeCount.add(1))
-                    .where(board.eq(board1))
+                    .where(board.eq(selectedBoard))
                     .execute();
-        } else {
-            queryFactory.update(board)
-                    .set(board.likeCount, board.likeCount.subtract(1))
-                    .where(board.eq(board1))
-                    .execute();
-        }
+    }
+
+    @Override
+    public void subLikeCount(Board selectedBoard) {
+        queryFactory.update(board)
+                .set(board.likeCount, board.likeCount.subtract(1))
+                .where(board.eq(selectedBoard))
+                .execute();
     }
 }
