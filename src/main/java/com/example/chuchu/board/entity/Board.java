@@ -1,7 +1,6 @@
 package com.example.chuchu.board.entity;
 
 import com.example.chuchu.board.dto.BoardRequestDTO;
-import com.example.chuchu.board.dto.BoardResponseDTO;
 import com.example.chuchu.category.entity.Category;
 import com.example.chuchu.common.global.BaseTimeEntity;
 import com.example.chuchu.member.entity.Member;
@@ -91,15 +90,16 @@ public class Board extends BaseTimeEntity {
         return this;
     }
 
-    public Board updateMember(Member member) {
+    public void updateMember(Member member) {
         this.writer = member;
-        return this;
     }
 
-    public Board updateCategory(Category category) {
+    public void updateCategory(Category category) {
         this.category = category;
-        return this;
     }
 
 
+    public void viewCountUp(Board board) {
+        board.viewCount++;
+    }
 }

@@ -94,4 +94,10 @@ public class BoardService {
         boardResponseDTO.setCommentResponseDTOList(commentResponseDTOList);
         return boardResponseDTO;
     }
+
+    @Transactional
+    public void viewCountUp(Long boardId) {
+        Board board = findById(boardId);
+        board.viewCountUp(board);
+    }
 }
