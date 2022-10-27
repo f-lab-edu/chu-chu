@@ -2,6 +2,7 @@ package com.example.chuchu.heart.service;
 
 import com.example.chuchu.board.entity.Board;
 import com.example.chuchu.board.repository.BoardRepository;
+import com.example.chuchu.common.errors.exception.DuplicateResourceException;
 import com.example.chuchu.common.errors.exception.NotFoundException;
 import com.example.chuchu.heart.dto.HeartRequestDTO;
 import com.example.chuchu.heart.entity.Heart;
@@ -34,7 +35,8 @@ public class HeartService {
         // 이미 좋아요되어있으면 에러 반환
         if (heartRepository.findByMemberAndBoard(member, board).isPresent()){
             //TODO 409에러로 변경
-            throw new Exception();
+            throw new DuplicateResourceException("already exist data by member id :" + member.getId() + " ,"
+                    + "board id : " + board.getId());
         }
 
         Heart heart = Heart.builder()
@@ -43,7 +45,7 @@ public class HeartService {
                 .build();
 
         heartRepository.save(heart);
-        boardRepository.updateCount(board,true);
+        boardRepository.addLikeCount(board);
     }
 
     @Transactional
@@ -59,6 +61,6 @@ public class HeartService {
                 .orElseThrow(() -> new NotFoundException("Could not found heart id"));
 
         heartRepository.delete(heart);
-        boardRepository.updateCount(board,false);
+        boardRepository.subLikeCount(board);
     }
 }
