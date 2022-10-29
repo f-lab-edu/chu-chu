@@ -9,8 +9,18 @@ spring:
     port: 6379
   profiles:
     active: dev
+  mail:
+    username: ENC()
+    password: ENC()
+    properties:
+      full-email: ENC()
+
 jwt:
-  secret-key: Thi$i$JwtP@s!!sw0rd0pEn$e$ame!!~
+  secret-key: ENC(2Fa4YT+N9pwNzO2w1wXRzdVo2f3q1pBd++3xntcOsvC66quAGdOw1D9t7G0Yb7W1)
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+#  jar VM 옵션으로 대체 -Djasypt.encryptor.password=
 ---
 # dev
 spring:
@@ -42,10 +52,9 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    #    url: jdbc:mysql://{}:3306
     url: jdbc:mysql://49.50.165.114:3306/chuchu?serverTimezone=Asia/Seoul
-    username: root
-    password: chuchu
+    username: ENC(UfZcFYVB/3COSoioXBJnwg==)
+    password: ENC(nJ+wE/57/RSdeI93ttAI9A==)
   jpa:
     hibernate:
       ddl-auto: update
