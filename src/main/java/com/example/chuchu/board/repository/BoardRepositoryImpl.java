@@ -79,4 +79,19 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
                 .where(board.eq(selectedBoard))
                 .execute();
     }
+
+    @Override
+    public List<BoardResponseDTO> getBestList(BoardType boardType) {
+        List<Board> boardList = queryFactory
+                .selectFrom(board)
+                .leftJoin(board.category, category).fetchJoin()
+                .leftJoin(board.writer, member).fetchJoin()
+                .where(
+                        board.boardType.eq(boardType))
+                .orderBy(board.likeCount.desc())
+                .limit(20)
+                .fetch();
+
+        return BoardResponseMapper.INSTANCE.toDtoList(boardList);
+    }
 }

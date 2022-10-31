@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import java.util.List;
+
 import static com.example.chuchu.common.global.HttpResponseEntity.ResponseResult;
 import static com.example.chuchu.common.global.HttpResponseEntity.success;
 
@@ -29,6 +31,13 @@ public class BoardController {
     private final BoardService boardService;
     private final BoardResponseMapper boardResponseMapper;
 
+    @GetMapping("/best/{boardType}")
+    public ResponseResult<?> getBestList(@PathVariable(value = "boardType") String boardType) {
+        BoardType enumBoardType = BoardType.valueOf(boardType.toUpperCase());
+        List<BoardResponseDTO> bestList = boardService.getBestList(enumBoardType);
+        return success(bestList);
+    }
+
     @GetMapping("/{boardType}")
     public ResponseResult<PageImpl<BoardResponseDTO>> getList(@PathVariable(value = "boardType") String boardType,
                                                               @RequestParam(value = "query", required = false) String query,
@@ -36,11 +45,11 @@ public class BoardController {
                                                               @RequestParam(value = "sort", required = false) String sort) {
 
         //TODO ENUM 설정 해볼 것
-        BoardType boardType1 = BoardType.valueOf(boardType.toUpperCase());
+        BoardType enumBoardType = BoardType.valueOf(boardType.toUpperCase());
 
         PageRequest pageRequest = new PageRequest(
                 page == null ? 1 : page, 20, Sort.Direction.DESC, sort == null ? "id" : sort);
-        PageImpl<BoardResponseDTO> boardList = boardService.getBoardList(query, boardType1, pageRequest.of());
+        PageImpl<BoardResponseDTO> boardList = boardService.getBoardList(query, enumBoardType, pageRequest.of());
         return success(boardList);
     }
 
