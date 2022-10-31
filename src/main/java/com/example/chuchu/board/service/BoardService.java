@@ -100,4 +100,8 @@ public class BoardService {
         Board board = findById(boardId);
         board.viewCountUp(board);
     }
+
+    public List<BoardResponseDTO> getBestList(BoardType boardType) {
+        return boardRepository.getBestList(boardType);
+    }
 }
