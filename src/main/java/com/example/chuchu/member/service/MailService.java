@@ -16,7 +16,7 @@ import java.io.UnsupportedEncodingException;
 @RequiredArgsConstructor
 public class MailService {
 
-    @Value("${spring.mail.properties.full-email}")
+    @Value("${spring.mail.username}")
     private String email;
     private final JavaMailSender javaMailSender;
 
