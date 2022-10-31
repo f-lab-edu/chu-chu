@@ -12,6 +12,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import static com.example.chuchu.common.global.HttpResponseEntity.ResponseResult;
@@ -42,7 +45,8 @@ public class BoardController {
     }
 
     @GetMapping("/detail/{id}")
-    public ResponseResult<BoardResponseDTO> getOne(@PathVariable(value = "id") Long id) {
+    public ResponseResult<BoardResponseDTO> getOne(@PathVariable(value = "id") Long id, HttpServletRequest req, HttpServletResponse res) {
+        viewCountUp(id, req, res);
         return success(boardService.getBoardWithTag(id));
     }
 
@@ -61,4 +65,36 @@ public class BoardController {
     public ResponseResult<BoardResponseDTO> delete(@PathVariable Long id) {
         return success(boardResponseMapper.toDto(boardService.delete(id)));
     }
+
+    private void viewCountUp(Long id, HttpServletRequest req, HttpServletResponse res) {
+
+        Cookie oldCookie = null;
+
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("boardView")) {
+                    oldCookie = cookie;
+                }
+            }
+        }
+
+        if (oldCookie != null) {
+            if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
+                boardService.viewCountUp(id);
+                oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
+                oldCookie.setPath("/");
+                oldCookie.setMaxAge(60 * 60 * 24);
+                res.addCookie(oldCookie);
+            }
+        } else {
+            boardService.viewCountUp(id);
+            Cookie newCookie = new Cookie("boardView","[" + id + "]");
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60 * 60 * 24);
+            res.addCookie(newCookie);
+        }
+    }
+
 }
+

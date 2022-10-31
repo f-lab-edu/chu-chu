@@ -49,12 +49,6 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
     @Override
     public BoardResponseDTO getBoardWithTag(Long id) {
 
-        // TODO 중복 조회를 어떻게 예방할 것인지 고민해야함
-        queryFactory.update(board)
-                .set(board.viewCount, board.viewCount.add(1))
-                .where(board.id.eq(id))
-                .execute();
-
         Board board1 = queryFactory.select(board)
                 .from(board)
                 .leftJoin(board.category, category).fetchJoin()
