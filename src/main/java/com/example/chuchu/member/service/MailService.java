@@ -2,6 +2,7 @@ package com.example.chuchu.member.service;
 
 import com.example.chuchu.member.entity.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,8 @@ import java.io.UnsupportedEncodingException;
 @RequiredArgsConstructor
 public class MailService {
 
+    @Value("${spring.mail.properties.full-email}")
+    private String email;
     private final JavaMailSender javaMailSender;
 
     public void sendMail(Member member) throws MessagingException, UnsupportedEncodingException {
@@ -34,7 +37,7 @@ public class MailService {
         msg += "</div>";
 
         message.setText(msg, "UTF-8", "html");// 내용, charset 타입, subtype
-        message.setFrom(new InternetAddress("", "ChuChu_Admin")); // 보내는 사람
+        message.setFrom(new InternetAddress(email, "ChuChu_Admin")); // 보내는 사람
 
         javaMailSender.send(message); // 메일 발송
     }
