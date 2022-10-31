@@ -10,10 +10,8 @@ spring:
   profiles:
     active: dev
   mail:
-    username: ENC()
-    password: ENC()
-    properties:
-      full-email: ENC()
+    username: ENC(OiTD9i1DdfQXxo/uc7j5qgRcGQXU49tmVBroZLlrBvs=)
+    password: ENC(NvY1hHRM1pST2s2nuLpMiJVubwbVDtntAXhnNIxzbSk=)
 
 jwt:
   secret-key: ENC(2Fa4YT+N9pwNzO2w1wXRzdVo2f3q1pBd++3xntcOsvC66quAGdOw1D9t7G0Yb7W1)
