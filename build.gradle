@@ -33,7 +33,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.projectlombok:lombok:1.18.24'

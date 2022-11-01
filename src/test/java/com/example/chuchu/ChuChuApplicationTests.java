@@ -1,4 +1,3 @@
-/*
 package com.example.chuchu;
 
 import org.junit.jupiter.api.Test;
@@ -12,4 +11,4 @@ class ChuChuApplicationTests {
     }
 
 }
-*/
+
