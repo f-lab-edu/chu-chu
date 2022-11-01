@@ -51,8 +51,8 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    url: jdbc:mysql://49.50.165.114:3306/chuchu?useSSL=false&serverTimezone=Asia/Seoul
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://49.50.165.114:3306/chuchu?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: chuchu
   jpa:
