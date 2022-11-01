@@ -44,7 +44,7 @@ public class WebSecurityConfig {
         //todo url 또는 권한 정리
         http
                 .authorizeRequests()
-                .antMatchers("/member/checkEmail","/member/login", "/member/join", "/favicon.ico", "/h2-console/**").permitAll()
+                .antMatchers("/member/checkEmail","/member/login", "/member/join", "/favicon.ico", "/h2-console/**", "/test/**").permitAll()
                 .antMatchers("/logout").authenticated()
                 .anyRequest().hasAnyRole("USER", "ADMIN");
 
