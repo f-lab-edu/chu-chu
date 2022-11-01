@@ -52,6 +52,7 @@ dependencies {
     implementation "com.querydsl:querydsl-apt:5.0.0"
     asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    implementation 'mysql:mysql-connector-java'
 }
 
 tasks.named('test') {

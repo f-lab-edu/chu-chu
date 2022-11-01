@@ -53,9 +53,8 @@ spring:
   datasource:
     url: jdbc:mysql://49.50.165.114:3306/chuchu?useSSL=false&serverTimezone=Asia/Seoul
     driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      username: root
-      password: chuchu
+    username: root
+    password: chuchu
   jpa:
     hibernate:
       ddl-auto: update
