@@ -10,11 +10,11 @@ spring:
   profiles:
     active: dev
   mail:
-    username: ENC(OiTD9i1DdfQXxo/uc7j5qgRcGQXU49tmVBroZLlrBvs=)
-    password: ENC(NvY1hHRM1pST2s2nuLpMiJVubwbVDtntAXhnNIxzbSk=)
+    username: chuchumanager@gmail.com
+    password: jsrjckxmuyizixss
 
 jwt:
-  secret-key: ENC(2Fa4YT+N9pwNzO2w1wXRzdVo2f3q1pBd++3xntcOsvC66quAGdOw1D9t7G0Yb7W1)
+  secret-key: Thi$i$JwtP@s!!sw0rd0pEn$e$ame!!~
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
@@ -50,8 +50,8 @@ spring:
   datasource:
     url: jdbc:mysql://49.50.165.114:3306/chuchu?useSSL=false&serverTimezone=Asia/Seoul
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ENC(UfZcFYVB/3COSoioXBJnwg==)
-    password: ENC(nJ+wE/57/RSdeI93ttAI9A==)
+    username: root
+    password: chuchu
   jpa:
     hibernate:
       ddl-auto: update
