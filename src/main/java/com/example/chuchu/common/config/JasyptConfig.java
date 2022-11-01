@@ -1,3 +1,4 @@
+/*
 package com.example.chuchu.common.config;
 
 import org.jasypt.encryption.StringEncryptor;
@@ -28,3 +29,4 @@ public class JasyptConfig {
     }
 
 }
+*/
