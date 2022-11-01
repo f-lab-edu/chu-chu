@@ -56,6 +56,7 @@ spring:
     #ENC(UfZcFYVB/3COSoioXBJnwg==)
     password: chuchu
     #ENC(nJ+wE/57/RSdeI93ttAI9A==)
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
