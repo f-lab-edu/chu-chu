@@ -52,11 +52,10 @@ spring:
       on-profile: prod
   datasource:
     url: jdbc:mysql://49.50.165.114:3306/chuchu?useSSL=false&serverTimezone=Asia/Seoul
-    username: root
-    #ENC(UfZcFYVB/3COSoioXBJnwg==)
-    password: chuchu
-    #ENC(nJ+wE/57/RSdeI93ttAI9A==)
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      username: root
+      password: chuchu
   jpa:
     hibernate:
       ddl-auto: update
