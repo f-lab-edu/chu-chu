@@ -2,7 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.4'
     id 'io.spring.dependency-management' version '1.0.14.RELEASE'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
-    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+//    id 'org.asciidoctor.jvm.convert' version '3.3.2'
     id 'java'
 }
 
@@ -10,20 +10,20 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
-configurations {
-    asciidoctorExtensions
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
+//configurations {
+//    asciidoctorExtensions
+//    compileOnly {
+//        extendsFrom annotationProcessor
+//    }
+//}
 
 repositories {
     mavenCentral()
 }
 
-ext {
-    snippetsDir = file('build/generated-snippets')
-}
+//ext {
+//    snippetsDir = file('build/generated-snippets')
+//}
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -50,7 +50,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'com.querydsl:querydsl-jpa:5.0.0'
     implementation "com.querydsl:querydsl-apt:5.0.0"
-    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+//    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     implementation 'mysql:mysql-connector-java'
 }
@@ -62,31 +62,31 @@ tasks.named('test') {
 /*
  * restDoc 설정 추가
  */
-test {
-    outputs.dir snippetsDir
-    useJUnitPlatform()
-}
-
-asciidoctor {
-    configurations 'asciidoctorExtensions'
-    inputs.dir snippetsDir
-    dependsOn test
-}
-
-bootJar {
-    dependsOn asciidoctor
-    finalizedBy 'copyDocument'
-}
-
-task copyDocument(type: Copy) {
-    dependsOn bootJar
-    from file("build/docs/asciidoc")
-    into file("src/main/resources/static/docs")
-}
-
-asciidoctor.doFirst {
-    delete file('src/main/resources/static/docs')
-}
+//test {
+//    outputs.dir snippetsDir
+//    useJUnitPlatform()
+//}
+//
+//asciidoctor {
+//    configurations 'asciidoctorExtensions'
+//    inputs.dir snippetsDir
+//    dependsOn test
+//}
+//
+//bootJar {
+//    dependsOn asciidoctor
+//    finalizedBy 'copyDocument'
+//}
+//
+//task copyDocument(type: Copy) {
+//    dependsOn bootJar
+//    from file("build/docs/asciidoc")
+//    into file("src/main/resources/static/docs")
+//}
+//
+//asciidoctor.doFirst {
+//    delete file('src/main/resources/static/docs')
+//}
 
 /*
  * queryDSL 설정 추가
