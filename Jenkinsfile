@@ -25,7 +25,7 @@ pipeline {
                 junit '**/build/test-results/test/*.xml'
             }
         }   // Junit 테스트 결과를 젠킨스 프로젝트 첫 화면에서 볼 수 있게 결과물을 출력한다. 이렇게 해주면 알아서 결과물을 보여준다.
-        stage('Clean'){가
+        stage('Clean'){
             steps{
                 sh "chmod +x gradlew;"
                 sh "./gradlew clean;"
