@@ -19,7 +19,7 @@ public class TestController {
 
     @GetMapping
     public String test() {
-        return "Hello, this application is chuchu test jenkins0.0.1";
+        return "Hello, this application is chuchu test jenkins0.0.2";
     }
 
     @GetMapping("/board/{title}")
