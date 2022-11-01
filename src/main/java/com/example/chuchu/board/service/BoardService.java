@@ -79,7 +79,7 @@ public class BoardService {
     @Transactional(readOnly = true)
     public PageImpl<BoardResponseDTO> getBoardList(String query, BoardType boardType, Pageable pageable) {
 
-        if (query == null){
+        if (query == null) {
             query = "";
         }
 
@@ -103,5 +103,11 @@ public class BoardService {
 
     public List<BoardResponseDTO> getBestList(BoardType boardType) {
         return boardRepository.getBestList(boardType);
+    }
+
+    @Transactional(readOnly = true)
+    public Board getBoardByTitle(String title) {
+        return boardRepository.findByTitle(title);
+
     }
 }
