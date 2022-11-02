@@ -11,6 +11,10 @@ public class HttpResponseEntity {
         return new ResponseResult<>(true, response, null);
     }
 
+    public static <T> ResponseResult<T> success() {
+        return success(null);
+    }
+
     public static ResponseResult<?> error(Throwable throwable, HttpStatus status) {
         return new ResponseResult<>(false, null, new ResponseError(throwable, status));
     }

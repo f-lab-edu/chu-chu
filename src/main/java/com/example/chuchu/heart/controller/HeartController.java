@@ -23,13 +23,13 @@ public class HeartController {
     @PostMapping
     public ResponseResult<?> insert(@RequestBody @Valid HeartRequestDTO heartRequestDTO) throws Exception {
         heartService.insert(heartRequestDTO);
-        return success(null);
+        return success();
     }
 
     @DeleteMapping
     public ResponseResult<?> delete(@RequestBody @Valid HeartRequestDTO heartRequestDTO) {
         heartService.delete(heartRequestDTO);
-        return success(null);
+        return success();
     }
 
 }
