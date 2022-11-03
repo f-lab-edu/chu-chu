@@ -31,7 +31,7 @@ public class Member extends BaseTimeEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "level", nullable = false)
+    @Column(name = "level")
     private Level level;
 
     @Enumerated(EnumType.STRING)
@@ -54,8 +54,8 @@ public class Member extends BaseTimeEntity {
         this.userRole = userRole;
         this.emailCode = UUID.randomUUID().toString();
         this.emailVerified = false;
-        this.level = Level.BRONZE;
-        this.userRole = UserRole.ROLE_USER;
+        this.level = level == null ? Level.BRONZE : level;
+        this.userRole = userRole == null ? UserRole.ROLE_USER : userRole;
     }
 
     /**
