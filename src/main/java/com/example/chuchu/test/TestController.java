@@ -25,6 +25,5 @@ public class TestController {
     @GetMapping("/board/{title}")
     public BoardResponseDTO getBoard(@PathVariable(value = "title") String title) {
         return boardResponseMapper.toDto(boardService.getBoardByTitle(title));
-
     }
 }
