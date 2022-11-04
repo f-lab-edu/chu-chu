@@ -21,9 +21,25 @@
  
   https://velog.io/@korea3611/Spring-Boot-대댓글-기능-만들기
 
+
 * [#4] 게시글 좋아요 기능 만들기
 
   https://velog.io/@korea3611/Spring-Boot게시글-좋아요-기능-만들기
+
+
+* [#5] 게시글 조회수 증가, 중복방지 기능만들기
+
+  https://velog.io/@korea3611/Spring-Boot게시글-조회수-증가-중복방지-기능-만들기
+
+
+* [#6] 좋아요 수 증가 - 분산락을 이용하여 동시성 제어하기
+
+  https://velog.io/@korea3611/Spring-boot-좋아요수-증가-분산락을-이용하여-동시성-제어하기-redis활용하기
+
+
+* [#7] nGrinder를 이용하여 성능테스트를 하는 과정(1)-Index생성을 통한 성능개선
+
+  https://velog.io/@korea3611/nGrinder를-이용하여-성능테스트를-하는-과정1-Index생성을-통한-성능개선
 ---
 
 ## 프로젝트 중점사항
