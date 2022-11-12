@@ -63,3 +63,5 @@
 ## DB ERD
 
 ---
+![initial](https://github.com/f-lab-edu/chu-chu/blob/develop/images/chchu_erd.png)
+
