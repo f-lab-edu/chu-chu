@@ -33,6 +33,7 @@
 * [Google code Style](https://google.github.io/styleguide/javaguide.html) 준수
 
 ### Git-Flow 브랜치 전략
+![initial](https://github.com/f-lab-edu/chu-chu/blob/develop/images/git_flow.png)
 * master : 제품으로 출시될 수 있는 브랜치를 의미
 * develop : feature에서 리뷰완료한 브랜치를 Merge
 * feature : 기능을 개발하는 브랜치
