@@ -47,6 +47,7 @@
 * [#1] Jenkins를 이용하여 CICD환경 구축하기
 
   https://velog.io/@korea3611/Spring-Boot-Jenkins-이용하여-CICD-구축하기
+  
   https://velog.io/@korea3611/Spring-Boot-Jenkins-이용하여-CICD-구축하기2     
 
 * [#2] Jwt 토큰 인증 방식을 통한 회원 가입 기능 만들기
