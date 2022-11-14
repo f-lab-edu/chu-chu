@@ -8,7 +8,7 @@
 * Github, Slack을 통한 활발한 소통을 바탕으로 효율적인 협업을 추구
 
 ## 프로젝트 서버 구조도
-
+<img src="./images/server_architecture.png" width="600" height="400"/>
 ---
 
 ## 프로젝트 중점사항
@@ -89,6 +89,23 @@
 ---
 
 ## 화면 설계
+### figma를 이용하여 설계
+
+#### main화면
+
+<img src="./images/main.png" width="400" height="400"/>
+
+#### 게시판화면
+
+<img src="./images/board.png" width="400" height="400"/>
+
+#### 상세 게시글 화면
+
+<img src="./images/board_detail.png" width="400" height="400"/>
+
+#### 로그인 화면
+
+<img src="./images/login.png" width="400" height="400"/>
 
 ---
 
