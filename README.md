@@ -21,20 +21,20 @@
 ## 프로젝트 정보
 
 ### 프로젝트 환경
-- Java 17
-- Gradle 7.4
-- Springboot 2.7.4
-- Jenkins
-- Mysql 5.6
-- Redis
-- Naver Cloud Platform
+* Java 17
+* Gradle 7.4
+* Springboot 2.7.4
+* Jenkins
+* Mysql 5.6
+* Redis
+* Naver Cloud Platform
 
 ### Code Convention
 * [Google code Style](https://google.github.io/styleguide/javaguide.html) 준수
 
 ### Git-Flow 브랜치 전략
-* master : 제품으로 출시될 수 있는 브랜치를 의미합니다.
-* develop : 다음 출시 버전을 개발하는 브랜치입니다. feature에서 리뷰완료한 브랜치를 Merge하고 있습니다.
+* master : 제품으로 출시될 수 있는 브랜치를 의미
+* develop : feature에서 리뷰완료한 브랜치를 Merge
 * feature : 기능을 개발하는 브랜치
 * release : 이번 출시 버전을 준비하는 브랜치
 * hotfix : 출시 버전에서 발생한 버그를 수정하는 브랜치
