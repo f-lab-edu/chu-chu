@@ -9,7 +9,7 @@
 
 ## 프로젝트 서버 구조도
 <img src="./images/server_architecture.png" width="600" height="400"/>
----
+
 
 ## 프로젝트 중점사항
 * 인증/인가를 위한 JWT
