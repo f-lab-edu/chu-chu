@@ -52,7 +52,7 @@
 
 * [#2] Jwt 토큰 인증 방식을 통한 회원 가입 기능 만들기
   
-  
+  https://computerstorage.tistory.com/13
  
 * [#3] HashTag 기능 만들기
 
@@ -85,6 +85,7 @@
 
 * [#9] Redis Cache를 적용으로 읽기 작업 성능 개선
 
+  https://computerstorage.tistory.com/14
 
 ---
 
